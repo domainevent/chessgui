@@ -1,25 +1,16 @@
-import java.util.Optional;
-import Networking.Client;
-import Networking.NetworkConnection;
-import Networking.Server;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import java.util.Optional;
 
 public class ChessGUI extends Application 
 {
@@ -123,44 +114,7 @@ public class ChessGUI extends Application
         }
     }
 
-    // Initialize Server
-    private Server createServer() {
-        return new Server(444, data -> {
-            // Below: Runs whenever data is revieved from the client.
-            //        runLater() gives JavaFX time to draw GUI.
-            Platform.runLater(() -> {
-                if (data instanceof MoveInfo)
-                {
-                    board.processOpponentMove((MoveInfo) data);
-                }
-                else // if (data instanceof String)
-                {
-                    // Display in chat message box
-                    chatArea.appendText(data.toString() + "\n");
-                }
-            });
-        });
-    }
 
-    // Initialize Client
-    private Client createClient() {
-        // localhost IP address
-        return new Client("127.0.0.1", 444, data -> {
-            // Below: Runs whenever data is revieved from the server.
-            //        runLater() gives JavaFX time to draw GUI.
-            Platform.runLater(() -> {
-                if (data instanceof MoveInfo)
-                {
-                    board.processOpponentMove((MoveInfo) data);
-                }
-                else // if (data instanceof String)
-                {
-                    // Display in chat message box
-                    chatArea.appendText(data.toString() + "\n");
-                }
-            });
-        });
-    }
 
     // Quits program
     public void onQuit()
