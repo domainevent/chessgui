@@ -2,16 +2,17 @@ package com.javacook.chessgui;
 
 import javafx.scene.image.Image;
 
-public abstract class Piece
-{
+
+public abstract class Piece {
+
     protected boolean hasMoved;
     protected Image image;
     protected boolean color;
 
     // validMoves
 
-    public Piece(boolean color)
-    {
+
+    public Piece(boolean color) {
         this.color = color;
 
         //for pawn double move and castling(?)
@@ -25,43 +26,46 @@ public abstract class Piece
 
     }
 
-    public boolean getHasMoved()
-    {
+
+    public boolean getHasMoved() {
         return this.hasMoved;
     }
 
-    public void setHasMoved(boolean shouldBeTrue)
-    {
+
+    public void setHasMoved(boolean shouldBeTrue) {
         this.hasMoved = shouldBeTrue;
     }
 
+
     // Returns image of chess piece
-    public Image getImage()
-    {
+    public Image getImage() {
         return this.image;
     }
 
+
     // Get piece color as string
-    public String getColor()
-    {
+    public String getColor() {
         if (this.color == true)
             return "white";
         else
             return "black";
     }
 
+
     // returns true if color is white
-    public boolean isWhite()
-    {
+    public boolean isWhite() {
         return this.color;
     }
 
-    public String toString()
-    {
+
+    public String toString() {
         return (this.getName() + " " + this.getColor());
     }
 
+
     protected abstract MoveList[] getPieceMoves();
+
     protected abstract boolean usesSingleMove();
+
     protected abstract String getName();
 }

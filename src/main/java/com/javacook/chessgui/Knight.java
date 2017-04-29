@@ -1,17 +1,15 @@
 package com.javacook.chessgui;
 
-public class Knight extends Piece
-{
-    public Knight(boolean color)
-    {
+public class Knight extends Piece {
+
+    public Knight(boolean color) {
         //this calls the constructor of com.javacook.chessgui.Piece
         super(color);
     }
 
-    protected MoveList[] getPieceMoves()
-    {
-        MoveList[] m =
-            {
+
+    protected MoveList[] getPieceMoves() {
+        MoveList[] m = {
                 MoveList.KNIGHT_LEFT_UP,
                 MoveList.KNIGHT_UP_LEFT,
                 MoveList.KNIGHT_UP_RIGHT,
@@ -20,10 +18,13 @@ public class Knight extends Piece
                 MoveList.KNIGHT_DOWN_RIGHT,
                 MoveList.KNIGHT_DOWN_LEFT,
                 MoveList.KNIGHT_LEFT_DOWN
-            };
+        };
         return m;
     }
 
-    protected boolean usesSingleMove(){return true;}
-    protected String getName(){return "knight";}
+
+    protected boolean usesSingleMove() {return true;}
+
+
+    protected String getName() {return "knight";}
 }

@@ -2,16 +2,16 @@ package com.javacook.chessgui;
 
 import java.util.ArrayList;
 
-public class Pawn extends Piece
-{
-    public Pawn(boolean color)
-    {
+
+public class Pawn extends Piece {
+
+    public Pawn(boolean color) {
         //this calls the constructor of com.javacook.chessgui.Piece
         super(color);
     }
 
-    protected MoveList[] getPieceMoves()
-    {
+
+    protected MoveList[] getPieceMoves() {
         /*
          * com.javacook.chessgui.Pawn movement is HIGHLY conditional, so this branches.
          * The list ensures correct direction and two-space movement.
@@ -23,8 +23,7 @@ public class Pawn extends Piece
         MoveList[] moves = {};
 
         //since pawns will never be white AND black, only returns moves of correct direction
-        if(isWhite)
-        {
+        if (isWhite) {
             ArrayList<MoveList> whiteMoves = new ArrayList<MoveList>();
 
             //standard straight, can't capture using this
@@ -35,12 +34,11 @@ public class Pawn extends Piece
             whiteMoves.add(MoveList.UP_LEFT);
 
             //if hasn't moved, UP is valid board move, can't capture using this
-            if(!hasMoved) {whiteMoves.add(MoveList.DOUBLE_UP);}
+            if (!hasMoved) {whiteMoves.add(MoveList.DOUBLE_UP);}
 
             moves = whiteMoves.toArray(moves);
         }
-        else
-        {
+        else {
             ArrayList<MoveList> blackMoves = new ArrayList<MoveList>();
 
             //standard straight, can't capture
@@ -51,7 +49,7 @@ public class Pawn extends Piece
             blackMoves.add(MoveList.DOWN_LEFT);
 
             //if hasn't moved, DOWN is valid board move, can't capture using this
-            if(!hasMoved) {blackMoves.add(MoveList.DOUBLE_DOWN);}
+            if (!hasMoved) {blackMoves.add(MoveList.DOUBLE_DOWN);}
 
             moves = blackMoves.toArray(moves);
         }
@@ -59,6 +57,9 @@ public class Pawn extends Piece
         return moves;
     }
 
-    protected boolean usesSingleMove(){return true;}
-    protected String getName(){return "pawn";}
+
+    protected boolean usesSingleMove() {return true;}
+
+
+    protected String getName() {return "pawn";}
 }
