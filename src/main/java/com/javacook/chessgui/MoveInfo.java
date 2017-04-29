@@ -28,7 +28,7 @@ public class MoveInfo implements Serializable {
 
 
     public String toString() {
-        return (getOld() + " to " + getNew());
+        return (getOld() + "-" + getNew());
     }
 
 
