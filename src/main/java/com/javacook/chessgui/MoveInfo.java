@@ -28,7 +28,7 @@ public class MoveInfo implements Serializable {
 
 
     public String toString() {
-        return (getCharLabel(oldX + 1) + (oldY + 1) + " to " + getCharLabel(newX + 1) + (newY + 1));
+        return (getOld() + " to " + getNew());
     }
 
 
@@ -38,10 +38,20 @@ public class MoveInfo implements Serializable {
     public int getOldY() {return this.oldY;}
 
 
+    public String getOld() {
+        return getCharLabel(oldX + 1) + (oldY + 1);
+    }
+
+
     public int getNewX() {return this.newX;}
 
 
     public int getNewY() {return this.newY;}
+
+
+    public String getNew() {
+        return getCharLabel(newX + 1) + (newY + 1);
+    }
 
 
     public void setOldX(int oldX) {this.oldX = oldX;}
