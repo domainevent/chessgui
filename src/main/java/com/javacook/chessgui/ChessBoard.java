@@ -15,8 +15,6 @@ public class ChessBoard extends GridPane {
 
 
     public ChessBoard(boolean playerIsWhite) {
-        //cause always call super
-        super();
 
         // initialize 8x8 array of spaces
         for (int x = 0; x < spaces[0].length; x++) {
@@ -26,8 +24,12 @@ public class ChessBoard extends GridPane {
 
                 // if white, add Spaces so ensured bottom left is 0,0
                 // if Black, add Spaces so ensured bottom left is 7,7
-                if (playerIsWhite) { this.add(spaces[x][y], x, 7 - y); }
-                else { this.add(spaces[x][y], 7 - x, y); }
+                if (playerIsWhite) {
+                    add(spaces[x][y], x, 7 - y);
+                }
+                else {
+                    add(spaces[x][y], 7 - x, y);
+                }
 
                 // Gets values into event handler
                 final int xVal = x;
@@ -52,14 +54,16 @@ public class ChessBoard extends GridPane {
 
     public void setActiveSpace(Space s) {
         // Remove style from old active space
-        if (this.activeSpace != null)
-            this.activeSpace.getStyleClass().removeAll("chess-space-active");
+        if (activeSpace != null) {
+            activeSpace.getStyleClass().removeAll("chess-space-active");
+        }
 
-        this.activeSpace = s;
+        activeSpace = s;
 
         // Add style to new active space
-        if (this.activeSpace != null)
-            this.activeSpace.getStyleClass().add("chess-space-active");
+        if (activeSpace != null) {
+            activeSpace.getStyleClass().add("chess-space-active");
+        }
     }
 
 
@@ -93,30 +97,32 @@ public class ChessBoard extends GridPane {
      */
     public void defineStartPositions() {
         // white pieces
-        this.spaces[0][0].setPiece(new Rook(true));
-        this.spaces[1][0].setPiece(new Knight(true));
-        this.spaces[2][0].setPiece(new Bishop(true));
-        this.spaces[3][0].setPiece(new Queen(true));
-        this.spaces[4][0].setPiece(new King(true));
-        this.spaces[5][0].setPiece(new Bishop(true));
-        this.spaces[6][0].setPiece(new Knight(true));
-        this.spaces[7][0].setPiece(new Rook(true));
+        spaces[0][0].setPiece(new Rook(true));
+        spaces[1][0].setPiece(new Knight(true));
+        spaces[2][0].setPiece(new Bishop(true));
+        spaces[3][0].setPiece(new Queen(true));
+        spaces[4][0].setPiece(new King(true));
+        spaces[5][0].setPiece(new Bishop(true));
+        spaces[6][0].setPiece(new Knight(true));
+        spaces[7][0].setPiece(new Rook(true));
 
-        for (int i = 0; i < this.spaces[0].length; i++)
-            this.spaces[i][1].setPiece(new Pawn(true));
+        for (int i = 0; i < spaces[0].length; i++) {
+            spaces[i][1].setPiece(new Pawn(true));
+        }
 
         // black pieces
-        this.spaces[0][7].setPiece(new Rook(false));
-        this.spaces[1][7].setPiece(new Knight(false));
-        this.spaces[2][7].setPiece(new Bishop(false));
-        this.spaces[3][7].setPiece(new Queen(false));
-        this.spaces[4][7].setPiece(new King(false));
-        this.spaces[5][7].setPiece(new Bishop(false));
-        this.spaces[6][7].setPiece(new Knight(false));
-        this.spaces[7][7].setPiece(new Rook(false));
+        spaces[0][7].setPiece(new Rook(false));
+        spaces[1][7].setPiece(new Knight(false));
+        spaces[2][7].setPiece(new Bishop(false));
+        spaces[3][7].setPiece(new Queen(false));
+        spaces[4][7].setPiece(new King(false));
+        spaces[5][7].setPiece(new Bishop(false));
+        spaces[6][7].setPiece(new Knight(false));
+        spaces[7][7].setPiece(new Rook(false));
 
-        for (int i = 0; i < this.spaces[0].length; i++)
-            this.spaces[i][6].setPiece(new Pawn(false));
+        for (int i = 0; i < spaces[0].length; i++) {
+            spaces[i][6].setPiece(new Pawn(false));
+        }
     }
 
 
@@ -126,6 +132,7 @@ public class ChessBoard extends GridPane {
         if (activeSpace != null &&
                 activeSpace.getPiece() != null &&
                 clickedSpace.getPieceColor() != activeSpace.getPieceColor()) {
+
             MoveInfo p;
             p = new MoveInfo(activeSpace.getX(), activeSpace.getY(), x, y);
 
@@ -150,7 +157,7 @@ public class ChessBoard extends GridPane {
     protected boolean processMove(MoveInfo p) {
         // FIXME: hier ueber das dddchess senden:
         System.out.println("Move: " + p);
-        ;
+
         if (true)
 //            if (moveIsValid(p))
         {
