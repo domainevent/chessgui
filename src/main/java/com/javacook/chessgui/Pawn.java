@@ -1,19 +1,21 @@
+package com.javacook.chessgui;
+
 import java.util.ArrayList;
 
 public class Pawn extends Piece
 {
     public Pawn(boolean color)
     {
-        //this calls the constructor of Piece
+        //this calls the constructor of com.javacook.chessgui.Piece
         super(color);
     }
 
     protected MoveList[] getPieceMoves()
     {
         /*
-         * Pawn movement is HIGHLY conditional, so this branches.
+         * com.javacook.chessgui.Pawn movement is HIGHLY conditional, so this branches.
          * The list ensures correct direction and two-space movement.
-         * All the board-dependent things (like diagonal iff capturing) are ChessBoard's job.
+         * All the board-dependent things (like diagonal iff capturing) are com.javacook.chessgui.ChessBoard's job.
         */
         boolean isWhite = this.color;
 

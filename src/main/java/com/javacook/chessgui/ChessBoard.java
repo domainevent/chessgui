@@ -1,3 +1,5 @@
+package com.javacook.chessgui;
+
 import javafx.scene.layout.GridPane;
 
 public class ChessBoard extends GridPane

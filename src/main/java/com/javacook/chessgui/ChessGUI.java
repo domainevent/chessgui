@@ -1,3 +1,5 @@
+package com.javacook.chessgui;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;

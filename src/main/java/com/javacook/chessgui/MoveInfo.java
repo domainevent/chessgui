@@ -1,3 +1,5 @@
+package com.javacook.chessgui;
+
 import java.io.Serializable;
 
 public class MoveInfo implements Serializable

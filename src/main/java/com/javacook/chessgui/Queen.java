@@ -1,8 +1,10 @@
-public class King extends Piece
+package com.javacook.chessgui;
+
+public class Queen extends Piece
 {
-    public King(boolean color)
+    public Queen(boolean color)
     {
-        //this calls the constructor of Piece
+        //this calls the constructor of com.javacook.chessgui.Piece
         super(color);
     }
 
@@ -22,6 +24,6 @@ public class King extends Piece
         return m;
     }
 
-    protected boolean usesSingleMove(){return true;}
-    protected String getName(){return "king";}
+    protected boolean usesSingleMove(){return false;}
+    protected String getName(){return "queen";}
 }

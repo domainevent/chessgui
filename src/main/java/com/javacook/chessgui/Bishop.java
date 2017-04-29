@@ -1,8 +1,10 @@
+package com.javacook.chessgui;
+
 public class Bishop extends Piece
 {
     public Bishop(boolean color)
     {
-        //this calls the constructor of Piece
+        //this calls the constructor of com.javacook.chessgui.Piece
         super(color);
     }
 

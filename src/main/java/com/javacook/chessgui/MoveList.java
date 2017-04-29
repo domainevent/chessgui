@@ -1,3 +1,5 @@
+package com.javacook.chessgui;
+
 public enum MoveList
 {
     UP (0,1),
