@@ -2,6 +2,11 @@ package com.javacook.chessgui;
 
 import javafx.scene.layout.GridPane;
 
+import javax.ws.rs.client.*;
+import javax.ws.rs.core.Form;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
 
 public class ChessBoard extends GridPane {
 
@@ -157,6 +162,27 @@ public class ChessBoard extends GridPane {
     protected boolean processMove(MoveInfo p) {
         // FIXME: hier ueber das dddchess senden:
         System.out.println("Move: " + p);
+
+        Client client = ClientBuilder.newClient();
+//        WebTarget webTarget = client
+//                .target("http://localhost:8080/dddtutorial/chessgame")
+//                .path("move")
+//                .queryParam("from", p.getOld())
+//                .queryParam("to", p.getNew());
+//
+//        Invocation.Builder invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON)
+//        Response response = invocationBuilder.get();
+
+        WebTarget webTarget = client
+                .target("http://localhost:8080/dddtutorial/chessgame")
+                .path("move");
+        Form form = new Form();
+        form.param("move", p.toString());
+        final Response response = webTarget
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
+
+        System.out.println("Response" + response.readEntity(String.class));
 
         if (true)
 //            if (moveIsValid(p))
