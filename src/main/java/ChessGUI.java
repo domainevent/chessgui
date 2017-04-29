@@ -12,36 +12,33 @@ import javafx.stage.Stage;
 
 import java.util.Optional;
 
-public class ChessGUI extends Application 
-{
-    public static void main(String[] args) 
-    {
+
+/**
+ * Start of the Chess GUI application
+ */
+public class ChessGUI extends Application {
+
+    public static void main(String[] args) {
         // Automatic VM reset, thanks to Joseph Rachmuth.
-        try
-        {
+        try {
             launch(args);
             System.exit(0);
         }
-        catch (Exception error)
-        {
+        catch (Exception error) {
             error.printStackTrace();
             System.exit(0);
         }
     }
 
-    // Hack: Set connection as public static so it may be used
-    //       by ChessBoard to send moves. (VERY HACKY!)
-//    public static NetworkConnection connection;
 
     private ChessBoard board;
-    private TextArea chatArea; // chat messages
     private boolean playerIsWhite; // white player = server
 
+
     @Override
-    public void start(Stage mainStage) 
-    {
+    public void start(Stage mainStage) {
         mainStage.setTitle("Chess Game");
-        mainStage.getIcons().add( new Image("assets/icons/app_icon.png") );
+        mainStage.getIcons().add(new Image("assets/icons/app_icon.png"));
 
         BorderPane root = new BorderPane();
         Scene mainScene = new Scene(root);
@@ -64,9 +61,10 @@ public class ChessGUI extends Application
         mainStage.show();
     }
 
+
     public void stop() {
         try {
-            // ...
+            // TODO vollmerj: Is there something to do?
         }
         catch (NullPointerException e) {
             // Nothing to close. Connention never initialized and/or established
@@ -76,18 +74,11 @@ public class ChessGUI extends Application
         }
     }
 
-    // Prompts the player to choose team color
-    // TODO: Change return type to enum so we can return NULL
-    //       if user exits without selecting a color;
-    public void choosePlayerColor()
-    {
-        // TODO: If a chess game is currently ongoing, warn that
-        //         "Starting a new game while a match is in progress will count as a forfiet."
-        //         "Do you still want to start a new game?"
-        //            "Yes"   "No"
-        //
-        //       If no, just break/return and ignore the following code
 
+    /**
+     * Prompts the player to choose team color
+     */
+    public void choosePlayerColor() {
         // Prompt user for new game
         Alert newGameAlert = new Alert(AlertType.CONFIRMATION);
         newGameAlert.setTitle("Start new game");
@@ -100,54 +91,54 @@ public class ChessGUI extends Application
         newGameAlert.getButtonTypes().setAll(buttonTypeWhite, buttonTypeBlack);
         Optional<ButtonType> result = newGameAlert.showAndWait();
 
-        if (result.get() == buttonTypeWhite)
-        {
+        if (result.get() == buttonTypeWhite) {
             this.playerIsWhite = true;
         }
-        else if (result.get() == buttonTypeBlack)
-        {
+        else if (result.get() == buttonTypeBlack) {
             this.playerIsWhite = false;
         }
-        else // offline mode
-        {
+        else {
             this.playerIsWhite = true;
         }
     }
 
 
-
-    // Quits program
-    public void onQuit()
-    {
+    /**
+     * Quits program
+     */
+    public void onQuit() {
         Platform.exit();
         System.exit(0);
     }
 
-    // Display 'about' menu
-    public void onDisplayAbout()
-    {
+
+    /**
+     * Display 'about' menu
+     */
+    public void onDisplayAbout() {
         Alert infoAlert = new Alert(AlertType.INFORMATION);
         infoAlert.setTitle("About this program");
-        infoAlert.setHeaderText(null); 
+        infoAlert.setHeaderText(null);
 
         // set window icon
         Stage alertStage = (Stage) infoAlert.getDialogPane().getScene().getWindow();
-        alertStage.getIcons().add( new Image("assets/icons/about.png") );
+        alertStage.getIcons().add(new Image("assets/icons/about.png"));
 
         // the graphic replaces the standard icon on the left
         //infoAlert.setGraphic( new ImageView( new Image("assets/icons/cat.png", 64, 64, true, true) ) );
 
         infoAlert.setContentText("Programmed by Maxwell Sirotin and Steven Vascellaro.\n\n" +
-            "Chess icons by \"Colin M.L. Burnett\".\n\n" + 
-            "Networking package & chat client based on \n\"JavaFX Software: Chat (Server-Client)\" \nby Almas Baimagambetov.\n\n" +
-            "App icon by BlackVariant.");
+                "Chess icons by \"Colin M.L. Burnett\".\n\n" +
+                "Networking package & chat client based on \n\"JavaFX Software: Chat (Server-Client)\" \nby Almas Baimagambetov.\n\n" +
+                "App icon by BlackVariant.");
         infoAlert.showAndWait();
     }
 
 
-    // Generate main menu bar
-    private MenuBar generateMenuBar()
-    {
+    /**
+     * Generate main menu bar
+     */
+    private MenuBar generateMenuBar() {
         MenuBar menuBar = new MenuBar();
 
         Menu gameMenu = new Menu("Game");
@@ -156,7 +147,7 @@ public class ChessGUI extends Application
         MenuItem menuItemQuit = new MenuItem("Quit");
         menuItemQuit.setOnAction(e -> onQuit());
         //menuItemQuit.setGraphic( new ImageView( new Image("assets/icons/quit.png", 16, 16, true, true) ) );
-        menuItemQuit.setAccelerator( new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN) );
+        menuItemQuit.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN));
         gameMenu.getItems().add(menuItemQuit);
 
         Menu menuHelp = new Menu("Help");
@@ -167,7 +158,7 @@ public class ChessGUI extends Application
         // Note: Accelerator F1 does not work if TextField is
         //       in focus. This is a known issue in JavaFX.
         //       https://bugs.openjdk.java.net/browse/JDK-8148857
-        menuItemAbout.setAccelerator( new KeyCodeCombination(KeyCode.F1) );
+        menuItemAbout.setAccelerator(new KeyCodeCombination(KeyCode.F1));
         menuItemAbout.setOnAction(e -> onDisplayAbout());
         menuHelp.getItems().add(menuItemAbout);
 
