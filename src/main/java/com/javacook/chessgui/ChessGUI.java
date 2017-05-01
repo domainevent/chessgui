@@ -85,7 +85,7 @@ public class ChessGUI extends Application {
         Alert newGameAlert = new Alert(AlertType.CONFIRMATION);
         newGameAlert.setTitle("Start new game");
         newGameAlert.setHeaderText(null);
-        newGameAlert.setContentText("Pick team color");
+        newGameAlert.setContentText("Pick your color");
 
         ButtonType buttonTypeWhite = new ButtonType("White");
         ButtonType buttonTypeBlack = new ButtonType("Black");
@@ -131,8 +131,9 @@ public class ChessGUI extends Application {
 
         infoAlert.setContentText("Programmed by Maxwell Sirotin and Steven Vascellaro.\n\n" +
                 "Chess icons by \"Colin M.L. Burnett\".\n\n" +
-                "Networking package & chat client based on \n\"JavaFX Software: Chat (Server-Client)\" \nby Almas Baimagambetov.\n\n" +
-                "App icon by BlackVariant.");
+                "App icon by BlackVariant.\n\n" +
+                "Modified for dddchess (a Domain Driven Design tutorial) " +
+                "by Jörg Vollmer (javacook).");
         infoAlert.showAndWait();
     }
 
