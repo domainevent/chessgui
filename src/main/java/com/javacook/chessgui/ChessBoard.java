@@ -1,11 +1,17 @@
 package com.javacook.chessgui;
 
+import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import javafx.scene.layout.GridPane;
 
-import javax.ws.rs.client.*;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Form;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Map;
 
 
 public class ChessBoard extends GridPane {
@@ -160,19 +166,9 @@ public class ChessBoard extends GridPane {
      * Process a move after it has been made by a player
      */
     protected boolean processMove(MoveInfo p) {
-        // FIXME: hier ueber das dddchess senden:
         System.out.println("Move: " + p);
 
-        Client client = ClientBuilder.newClient();
-//        WebTarget webTarget = client
-//                .target("http://localhost:8080/dddtutorial/chessgame")
-//                .path("move")
-//                .queryParam("from", p.getOld())
-//                .queryParam("to", p.getNew());
-//
-//        Invocation.Builder invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON)
-//        Response response = invocationBuilder.get();
-
+        Client client = ClientBuilder.newClient().register(JacksonJsonProvider.class);
         WebTarget webTarget = client
                 .target("http://localhost:8080/dddtutorial/chessgame")
                 .path("move");
@@ -182,20 +178,24 @@ public class ChessBoard extends GridPane {
                 .request(MediaType.APPLICATION_JSON)
                 .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
 
-        System.out.println("Response" + response.readEntity(String.class));
+        final Map<String, Object> map =
+                response.readEntity(new GenericType<Map<String, Object>>(){});
 
-        if (true)
-//            if (moveIsValid(p))
-        {
-            Space oldSpace = spaces[p.getOldX()][p.getOldY()];
-            Space newSpace = spaces[p.getNewX()][p.getNewY()];
+        System.out.println("Response" + map);
+        boolean success = map.containsKey("move index");
 
-            newSpace.setPiece(oldSpace.releasePiece());
-            return true;
-        }
-        else // invalid move
-        {
-            return false;
+        switch (response.getStatus()) {
+            case 200:
+                Space oldSpace = spaces[p.getOldX()][p.getOldY()];
+                Space newSpace = spaces[p.getNewX()][p.getNewY()];
+                newSpace.setPiece(oldSpace.releasePiece());
+                return true;
+            case 400:
+                final String errorDescr = (String)map.get("invalid move");
+                System.out.println("ERROR: " + errorDescr);
+                return false;
+            default:
+                return false;
         }
     }
 
