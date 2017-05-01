@@ -11,6 +11,7 @@
 
     <properties>
         <jerseyversion>2.25.1</jerseyversion>
+        <jacksonversion>2.8.8</jacksonversion>
     </properties>
 
     <build>
@@ -34,6 +35,13 @@
             <artifactId>jersey-client</artifactId>
             <version>${jerseyversion}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.jaxrs</groupId>
+            <artifactId>jackson-jaxrs-json-provider</artifactId>
+            <version>${jacksonversion}</version>
+        </dependency>
+
     </dependencies>
 
 </project>
