@@ -16,6 +16,7 @@ import java.util.Map;
 
 public class ChessBoard extends GridPane {
 
+    private final ChessGUI chessGUI;
     public Space[][] spaces = new Space[8][8];
     // const
 
@@ -25,7 +26,8 @@ public class ChessBoard extends GridPane {
     public Space activeSpace = null;
 
 
-    public ChessBoard(boolean playerIsWhite) {
+    public ChessBoard(ChessGUI chessGUI, boolean playerIsWhite) {
+        this.chessGUI = chessGUI;
 
         // initialize 8x8 array of spaces
         for (int x = 0; x < spaces[0].length; x++) {
@@ -46,7 +48,14 @@ public class ChessBoard extends GridPane {
                 final int xVal = x;
                 final int yVal = y;
                 // runs things that happen when a space is clicked
-                spaces[x][y].setOnAction(e -> onSpaceClick(xVal, yVal));
+                spaces[x][y].setOnAction(e -> {
+                    try {
+                        onSpaceClick(xVal, yVal);
+                    }
+                    catch (MoveException e1) {
+                        chessGUI.showHint(e1.getMessage());
+                    }
+                });
             }
         }
 
@@ -137,7 +146,13 @@ public class ChessBoard extends GridPane {
     }
 
 
-    public void onSpaceClick(int x, int y) {
+    /**
+     * Is called when someone clicks on a space (field), not when he uses the space bar
+     *
+     * @param x
+     * @param y
+     */
+    public void onSpaceClick(int x, int y) throws MoveException {
         Space clickedSpace = spaces[x][y];
         // if piece is selected && user didn't click on allied piece
         if (activeSpace != null &&
@@ -147,10 +162,13 @@ public class ChessBoard extends GridPane {
             MoveInfo p;
             p = new MoveInfo(activeSpace.getX(), activeSpace.getY(), x, y);
 
-            this.processMove(p);
-
-            //decouples space from space on board
-            this.setActiveSpace(null);
+            try {
+                this.processMove(p);
+            }
+            finally {
+                //decouples space from space on board
+                this.setActiveSpace(null);
+            }
         }
         else {
             //if there's a piece on the selected square when no active square
@@ -165,7 +183,7 @@ public class ChessBoard extends GridPane {
     /**
      * Process a move after it has been made by a player
      */
-    protected boolean processMove(MoveInfo p) {
+    protected void processMove(MoveInfo p) throws MoveException {
         System.out.println("Move: " + p);
 
         Client client = ClientBuilder.newClient().register(JacksonJsonProvider.class);
@@ -178,37 +196,27 @@ public class ChessBoard extends GridPane {
                 .request(MediaType.APPLICATION_JSON)
                 .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
 
-        final Map<String, Object> map =
-                response.readEntity(new GenericType<Map<String, Object>>(){});
+        final Map<String, Object> json =
+                response.readEntity(new GenericType<Map<String, Object>>() {});
 
-        System.out.println("Response" + map);
-        boolean success = map.containsKey("move index");
+        System.out.println("Response" + json);
+        boolean success = json.containsKey("move index");
 
         switch (response.getStatus()) {
             case 200:
+            case 201:
                 Space oldSpace = spaces[p.getOldX()][p.getOldY()];
                 Space newSpace = spaces[p.getNewX()][p.getNewY()];
                 newSpace.setPiece(oldSpace.releasePiece());
-                return true;
-            case 400:
-                final String errorDescr = (String)map.get("invalid move");
-                System.out.println("ERROR: " + errorDescr);
-                return false;
+                System.out.println("Location: " + response.getHeaderString("Location"));
+                break;
+            case 422:
+                final String errorDescr = (String) json.get("invalid move");
+                System.out.println("Status code 422: " + errorDescr);
+                throw new MoveException(errorDescr);
             default:
-                return false;
+                throw new MoveException(response.toString());
         }
     }
-
-
-    /**
-     * Process an opponent's move
-     */
-    public void processOpponentMove(MoveInfo p) {
-        if (processMove(p)) {
-            // unlock board
-            this.setDisable(false);
-        }
-    }
-
 
 }
