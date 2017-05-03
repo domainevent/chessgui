@@ -53,7 +53,7 @@ public class ChessGUI extends Application {
         choosePlayerColor();
 
         // draw chessboard
-        board = new ChessBoard(playerIsWhite);
+        board = new ChessBoard(this, playerIsWhite);
         root.setCenter(board); // sized 400x400
 
         // add menuBar
@@ -102,6 +102,22 @@ public class ChessGUI extends Application {
         else {
             this.playerIsWhite = true;
         }
+    }
+
+
+    /**
+     * Creates a alert box showing the text <code>hint</code>.
+     * @param hint text being displayed
+     */
+    public void showHint(String hint) {
+        Alert newGameAlert = new Alert(AlertType.INFORMATION);
+        newGameAlert.setTitle("Hint");
+        newGameAlert.setHeaderText(null);
+        newGameAlert.setContentText(hint);
+
+        ButtonType buttonTypeWhite = new ButtonType("OK");
+        newGameAlert.getButtonTypes().setAll(buttonTypeWhite);
+        Optional<ButtonType> result = newGameAlert.showAndWait();
     }
 
 
