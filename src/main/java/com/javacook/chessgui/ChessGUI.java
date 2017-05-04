@@ -64,6 +64,18 @@ public class ChessGUI extends Application {
     }
 
 
+    /**
+     * Starts a new game
+     */
+    public void onNewGame() {
+        // prompt user to select team color
+        choosePlayerColor();
+
+        // draw chessboard
+        board = new ChessBoard(this, playerIsWhite);
+    }
+
+
     public void stop() {
         try {
             // TODO vollmerj: Is there something to do?
@@ -109,8 +121,8 @@ public class ChessGUI extends Application {
      * Creates a alert box showing the text <code>hint</code>.
      * @param hint text being displayed
      */
-    public void showHint(String hint) {
-        Alert newGameAlert = new Alert(AlertType.INFORMATION);
+    public void showHint(AlertType alertType, String hint) {
+        Alert newGameAlert = new Alert(alertType);
         newGameAlert.setTitle("Hint");
         newGameAlert.setHeaderText(null);
         newGameAlert.setContentText(hint);
@@ -119,6 +131,8 @@ public class ChessGUI extends Application {
         newGameAlert.getButtonTypes().setAll(buttonTypeWhite);
         Optional<ButtonType> result = newGameAlert.showAndWait();
     }
+
+
 
 
     /**
@@ -163,9 +177,14 @@ public class ChessGUI extends Application {
         Menu gameMenu = new Menu("Game");
         menuBar.getMenus().add(gameMenu);
 
+
+        MenuItem menuItemNewGame = new MenuItem("New Game");
+        menuItemNewGame.setOnAction(e -> onNewGame());
+        menuItemNewGame.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
+        gameMenu.getItems().add(menuItemNewGame);
+
         MenuItem menuItemQuit = new MenuItem("Quit");
         menuItemQuit.setOnAction(e -> onQuit());
-        //menuItemQuit.setGraphic( new ImageView( new Image("assets/icons/quit.png", 16, 16, true, true) ) );
         menuItemQuit.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN));
         gameMenu.getItems().add(menuItemQuit);
 
