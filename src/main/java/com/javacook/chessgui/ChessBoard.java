@@ -1,8 +1,11 @@
 package com.javacook.chessgui;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
+import com.javacook.dddchess.domain.ErrorCode;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.GridPane;
 
+import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -11,10 +14,15 @@ import javax.ws.rs.core.Form;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.net.ConnectException;
 import java.util.Map;
+
+import static javafx.scene.control.Alert.AlertType.*;
 
 
 public class ChessBoard extends GridPane {
+
+    public final static String SERVER_URL = "http://localhost:8080/dddtutorial/chessgame";
 
     private final ChessGUI chessGUI;
     public Space[][] spaces = new Space[8][8];
@@ -52,9 +60,19 @@ public class ChessBoard extends GridPane {
                     try {
                         onSpaceClick(xVal, yVal);
                     }
-                    catch (MoveException e1) {
-                        chessGUI.showHint(e1.getMessage());
+                    catch (TimeoutException e1) {
+                        chessGUI.showHint(INFORMATION, "A server timeout has occured.");
                     }
+                    catch (MoveException e1) {
+                        chessGUI.showHint(Alert.AlertType.WARNING, "Invalid Move: " + e1.getMessage());
+                    }
+                    catch (ConnectException e1) {
+                        chessGUI.showHint(WARNING, "No connection to server:\n" + SERVER_URL);
+                    }
+                    catch (Throwable e1) {
+                        chessGUI.showHint(ERROR, "Unkown Error: " + e1.getMessage());
+                    }
+
                 });
             }
         }
@@ -152,7 +170,7 @@ public class ChessBoard extends GridPane {
      * @param x
      * @param y
      */
-    public void onSpaceClick(int x, int y) throws MoveException {
+    public void onSpaceClick(int x, int y) throws Throwable {
         Space clickedSpace = spaces[x][y];
         // if piece is selected && user didn't click on allied piece
         if (activeSpace != null &&
@@ -183,39 +201,68 @@ public class ChessBoard extends GridPane {
     /**
      * Process a move after it has been made by a player
      */
-    protected void processMove(MoveInfo p) throws MoveException {
+    protected void processMove(MoveInfo p) throws Throwable {
         System.out.println("Move: " + p);
 
         Client client = ClientBuilder.newClient().register(JacksonJsonProvider.class);
         WebTarget webTarget = client
-                .target("http://localhost:8080/dddtutorial/chessgame")
+                .target(SERVER_URL)
                 .path("move");
         Form form = new Form();
         form.param("move", p.toString());
-        final Response response = webTarget
-                .request(MediaType.APPLICATION_JSON)
-                .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
+        try {
 
-        final Map<String, Object> json =
-                response.readEntity(new GenericType<Map<String, Object>>() {});
+            final Response response = webTarget
+                    .request(MediaType.APPLICATION_JSON)
+                    .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
 
-        System.out.println("Response" + json);
-        boolean success = json.containsKey("move index");
+            final Map<String, Object> json =
+                    response.readEntity(new GenericType<Map<String, Object>>() {});
 
-        switch (response.getStatus()) {
-            case 200:
-            case 201:
-                Space oldSpace = spaces[p.getOldX()][p.getOldY()];
-                Space newSpace = spaces[p.getNewX()][p.getNewY()];
-                newSpace.setPiece(oldSpace.releasePiece());
-                System.out.println("Location: " + response.getHeaderString("Location"));
-                break;
-            case 422:
-                final String errorDescr = (String) json.get("invalid move");
-                System.out.println("Status code 422: " + errorDescr);
-                throw new MoveException(errorDescr);
-            default:
-                throw new MoveException(response.toString());
+            System.out.println("Response" + json);
+            boolean success = json.containsKey("move index");
+
+            switch (response.getStatus()) {
+                case 200:
+                case 201: {
+                    Space oldSpace = spaces[p.getOldX()][p.getOldY()];
+                    Space newSpace = spaces[p.getNewX()][p.getNewY()];
+                    newSpace.setPiece(oldSpace.releasePiece());
+                    System.out.println("Location: " + response.getHeaderString("Location"));
+                    break;
+                }
+                case 422:
+                case 503: {
+                    final String errorCodeKey = (String) json.get(ErrorCode.ERROR_CODE_KEY);
+                    if (errorCodeKey == null) {
+                        throw new RestException("Missing JSON attribute " + ErrorCode.ERROR_CODE_KEY);
+                    }
+                    ErrorCode errorCode = null;
+                    try {
+                        errorCode = ErrorCode.valueOf(errorCodeKey);
+                    }
+                    catch (IllegalArgumentException e) {
+                        throw new RestException("Unknown error code: " + errorCode);
+                    }
+                    final String errorDescr = (String) json.get(errorCodeKey);
+                    System.out.println("Status code " + response.getStatus() + ", message: " +
+                            (errorDescr == null? "no further information" : errorDescr));
+                    switch (errorCode) {
+                        case INVALID_MOVE:
+                            new MoveException(errorDescr);
+                        case TIMEOUT:
+                            throw new TimeoutException();
+                        default:
+                            throw new RestException("Unexpected error code: " + errorCode);
+                    }
+                }
+                default:
+                    throw new RestException("Unexpected response: " + response);
+            }
+        } catch (ProcessingException e) {
+            Throwable cause = e;
+            while (cause.getCause() != null) cause = cause.getCause();
+            throw cause;
         }
     }
 
