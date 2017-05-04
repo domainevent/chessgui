@@ -249,7 +249,7 @@ public class ChessBoard extends GridPane {
                             (errorDescr == null? "no further information" : errorDescr));
                     switch (errorCode) {
                         case INVALID_MOVE:
-                            new MoveException(errorDescr);
+                            throw new MoveException(errorDescr);
                         case TIMEOUT:
                             throw new TimeoutException();
                         default:
