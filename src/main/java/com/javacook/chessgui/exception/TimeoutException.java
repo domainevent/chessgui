@@ -1,4 +1,4 @@
-package com.javacook.chessgui;
+package com.javacook.chessgui.exception;
 
 /**
  * Created by vollmer on 02.05.17.

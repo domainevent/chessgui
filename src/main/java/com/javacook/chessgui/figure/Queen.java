@@ -1,9 +1,12 @@
-package com.javacook.chessgui;
+package com.javacook.chessgui.figure;
 
-public class King extends Piece {
+import com.javacook.chessgui.MoveList;
 
-    public King(boolean color) {
-        //this calls the constructor of com.javacook.chessgui.Piece
+
+public class Queen extends Piece {
+
+    public Queen(boolean color) {
+        //this calls the constructor of com.javacook.chessgui.figure.Piece
         super(color);
     }
 
@@ -23,8 +26,8 @@ public class King extends Piece {
     }
 
 
-    protected boolean usesSingleMove() {return true;}
+    protected boolean usesSingleMove() {return false;}
 
 
-    protected String getName() {return "king";}
+    protected String getName() {return "queen";}
 }

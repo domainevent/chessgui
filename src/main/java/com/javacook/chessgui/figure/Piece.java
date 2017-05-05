@@ -1,5 +1,6 @@
-package com.javacook.chessgui;
+package com.javacook.chessgui.figure;
 
+import com.javacook.chessgui.MoveList;
 import javafx.scene.image.Image;
 
 

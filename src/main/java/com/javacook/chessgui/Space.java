@@ -1,5 +1,6 @@
 package com.javacook.chessgui;
 
+import com.javacook.chessgui.figure.Piece;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 

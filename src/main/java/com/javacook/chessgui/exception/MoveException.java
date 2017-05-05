@@ -1,6 +1,4 @@
-package com.javacook.chessgui;
-
-import com.sun.org.apache.regexp.internal.RE;
+package com.javacook.chessgui.exception;
 
 
 /**
