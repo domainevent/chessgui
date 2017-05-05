@@ -1,6 +1,10 @@
 package com.javacook.chessgui;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
+import com.javacook.chessgui.exception.MoveException;
+import com.javacook.chessgui.exception.RestException;
+import com.javacook.chessgui.exception.TimeoutException;
+import com.javacook.chessgui.figure.*;
 import com.javacook.dddchess.domain.ErrorCode;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.GridPane;
