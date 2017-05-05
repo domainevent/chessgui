@@ -2,6 +2,7 @@ package com.javacook.chessgui;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import com.javacook.chessgui.exception.MoveException;
+import com.javacook.chessgui.exception.NotFoundException;
 import com.javacook.chessgui.exception.RestException;
 import com.javacook.chessgui.exception.TimeoutException;
 import com.javacook.chessgui.figure.*;
@@ -26,7 +27,7 @@ import static javafx.scene.control.Alert.AlertType.*;
 
 public class ChessBoard extends GridPane {
 
-    public final static String SERVER_URL = "http://localhost:8080/dddtutorial/chessgame";
+    public final static String SERVER_URL = "http://localhost:8080/dddtutorial/chessgames";
 
     private final ChessGUI chessGUI;
     public Space[][] spaces = new Space[8][8];
@@ -74,11 +75,29 @@ public class ChessBoard extends GridPane {
                         chessGUI.showHint(WARNING, "No connection to server:\n" + SERVER_URL);
                     }
                     catch (Throwable e1) {
-                        chessGUI.showHint(ERROR, "Unkown Error: " + e1.getMessage());
+                        chessGUI.showHint(ERROR, "Unknown Error: " + e1.getMessage());
                     }
-
                 });
             }
+        }
+
+        try {
+            newGame(playerIsWhite);
+        }
+        catch (ConnectException e1) {
+            chessGUI.showHint(WARNING, "No connection to server:\n" + SERVER_URL
+                    + "\nPlease try again later...");
+            System.exit(-1);
+        }
+        catch (NotFoundException e1) {
+            chessGUI.showHint(WARNING, "Communication error. Invalid URI:\n" + e1.getMessage()
+                    + "\nPlease contact the administrator (javacook@gmx.de)...");
+            System.exit(-1);
+        }
+        catch (Throwable e1) {
+            chessGUI.showHint(ERROR, "Unknown error: " + e1.getMessage()
+                    + "\nPlease contact the administrator (javacook@gmx.de)!");
+            System.exit(-2);
         }
 
         //put pieces in start positions
@@ -202,16 +221,47 @@ public class ChessBoard extends GridPane {
     }
 
 
+    private void newGame(boolean isPlayerWhite) throws Throwable {
+        System.out.println("New game, player plays " + (isPlayerWhite? "white" : "black"));
+
+        Client client = ClientBuilder.newClient().register(JacksonJsonProvider.class);
+        WebTarget webTarget = client
+                .target(SERVER_URL)
+                .path("games");
+        Form form = new Form();
+        form.param("color", isPlayerWhite? "WHITE" : "BLACK");
+
+        try {
+            final Response response = webTarget
+                    .request(MediaType.APPLICATION_JSON)
+                    .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
+
+            switch (response.getStatus()) {
+                case 200: return;
+                case 404:
+                    throw new NotFoundException(webTarget.getUri());
+                default:
+                    throw new RestException("Unexpected response: " + response);
+            }
+        }
+        catch (ProcessingException e) {
+            Throwable cause = e;
+            while (cause.getCause() != null) cause = cause.getCause();
+            throw cause;
+        }
+    }
+
+
     /**
      * Process a move after it has been made by a player
      */
-    protected void processMove(MoveInfo p) throws Throwable {
+    private void processMove(MoveInfo p) throws Throwable {
         System.out.println("Move: " + p);
 
         Client client = ClientBuilder.newClient().register(JacksonJsonProvider.class);
         WebTarget webTarget = client
                 .target(SERVER_URL)
-                .path("move");
+                .path("moves");
         Form form = new Form();
         form.param("move", p.toString());
         try {
@@ -235,6 +285,8 @@ public class ChessBoard extends GridPane {
                     System.out.println("Location: " + response.getHeaderString("Location"));
                     break;
                 }
+                case 404:
+                    throw new NotFoundException(webTarget.getUri());
                 case 422:
                 case 503: {
                     final String errorCodeKey = (String) json.get(ErrorCode.ERROR_CODE_KEY);
