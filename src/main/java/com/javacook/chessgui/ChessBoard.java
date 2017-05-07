@@ -6,6 +6,7 @@ import com.javacook.chessgui.exception.RestException;
 import com.javacook.chessgui.exception.TimeoutException;
 import com.javacook.chessgui.figure.*;
 import com.javacook.dddchess.domain.ErrorCode;
+import com.javacook.dddchess.domain.GameIdValueObject;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.GridPane;
 
@@ -26,19 +27,26 @@ import static javafx.scene.control.Alert.AlertType.*;
 
 public class ChessBoard extends GridPane {
 
-    private final ChessGUI chessGUI;
-    public Space[][] spaces = new Space[8][8];
-    // const
+    private final boolean playerIsWhite;
+    private Space[][] spaces = new Space[8][8];
+    private GameIdValueObject gameId;
 
     /**
      * last clicked space
      */
-    public Space activeSpace = null;
+    private Space activeSpace = null;
 
+    public GameIdValueObject getGameId() {
+        return gameId;
+    }
 
+    /**
+     * Constructor
+     * @param chessGUI
+     * @param playerIsWhite
+     */
     public ChessBoard(ChessGUI chessGUI, boolean playerIsWhite) {
-        this.chessGUI = chessGUI;
-
+        this.playerIsWhite = playerIsWhite;
         // initialize 8x8 array of spaces
         for (int x = 0; x < spaces[0].length; x++) {
             for (int y = 0; y < spaces[1].length; y++) {
@@ -72,7 +80,7 @@ public class ChessBoard extends GridPane {
                         chessGUI.showHint(WARNING, "No connection to server:" + System.lineSeparator() + SERVER_URL);
                     }
                     catch (Throwable e1) {
-                        chessGUI.showHint(ERROR, "Unknown Error: " + e1.getMessage());
+                        chessGUI.showHint(ERROR, "Unknown Error: " + e1);
                     }
                 });
             }
@@ -83,24 +91,24 @@ public class ChessBoard extends GridPane {
         }
         catch (ConnectException e1) {
             chessGUI.showHint(WARNING, "No connection to server:" + System.lineSeparator() + SERVER_URL
-                    + "\nPlease try again later...");
+                    + System.lineSeparator() + "Please try again later...");
             System.exit(-1);
         }
         catch (NotFoundException e1) {
             chessGUI.showHint(WARNING, "Communication error. Invalid URI:" + System.lineSeparator() + e1.getMessage()
-                    + "\nPlease contact the administrator (javacook@gmx.de)...");
+                    + System.lineSeparator() + "Please contact the administrator (javacook@gmx.de)...");
             System.exit(-1);
         }
         catch (Throwable e1) {
             chessGUI.showHint(ERROR, "Unknown error: " + e1.getMessage()
-                    + "\nPlease contact the administrator (javacook@gmx.de)!");
+                    + System.lineSeparator() + "Please contact the administrator (javacook@gmx.de)!");
             System.exit(-2);
         }
 
         //put pieces in start positions
         this.defineStartPositions();
 
-        new Thread(new UpdateBoardTask(spaces)).start();
+        new Thread(new UpdateBoardTask(this)).start();
     }
 
 
@@ -132,23 +140,6 @@ public class ChessBoard extends GridPane {
      */
     public Space getActiveSpace() {
         return this.activeSpace;
-    }
-
-
-    /**
-     * prints location of all pieces on the board
-     */
-    public String toString() {
-        // TODO: Unfinished
-        String pieceList = "";
-        for (int i = 0; i < spaces[0].length; i++) {
-            for (int j = 0; j < spaces[1].length; j++) {
-                if (spaces[i][j].isOccupied()) {
-                    //pieceList += spaces[i][j].toString();
-                }
-            }
-        }
-        return pieceList;
     }
 
 
@@ -188,9 +179,6 @@ public class ChessBoard extends GridPane {
 
     /**
      * Is called when someone clicks on a space (field), not when he uses the space bar
-     *
-     * @param x
-     * @param y
      */
     public void onSpaceClick(int x, int y) throws Throwable {
         Space clickedSpace = spaces[x][y];
@@ -211,8 +199,10 @@ public class ChessBoard extends GridPane {
             }
         }
         else {
-            //if there's a piece on the selected square when no active square
-            if (spaces[x][y].getPiece() != null) {
+            final Piece piece = spaces[x][y].getPiece();
+            // if there's a piece on the selected square when no active square
+            // and the color of the piece equals the player color
+            if (piece != null && piece.isWhite() == playerIsWhite) {
                 //make active square clicked square
                 this.setActiveSpace(spaces[x][y]);
             }
@@ -233,7 +223,8 @@ public class ChessBoard extends GridPane {
                     .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
 
             switch (response.getStatus()) {
-                case 200: return;
+                case 200: gameId = response.readEntity(GameIdValueObject.class);
+                    break;
                 case 404:
                     throw new NotFoundException(webTarget.getUri());
                 default:
@@ -254,7 +245,9 @@ public class ChessBoard extends GridPane {
     private void processMove(MoveInfo p) throws Throwable {
         System.out.println("Move: " + p);
 
-        WebTarget webTarget = CLIENT.target(SERVER_URL).path("moves");
+        WebTarget webTarget = CLIENT.target(SERVER_URL)
+                .path("games").path(gameId.id).path("moves");
+
         Form form = new Form();
         form.param("move", p.toString());
         try {

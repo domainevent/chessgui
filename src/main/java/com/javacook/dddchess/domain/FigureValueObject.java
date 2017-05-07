@@ -63,26 +63,6 @@ public class FigureValueObject {
 
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        FigureValueObject that = (FigureValueObject) o;
-
-        if (figure != that.figure) return false;
-        return color == that.color;
-    }
-
-
-    @Override
-    public int hashCode() {
-        int result = figure != null ? figure.hashCode() : 0;
-        result = 31 * result + (color != null ? color.hashCode() : 0);
-        return result;
-    }
-
-
-    @Override
     public String toString() {
         return "FigureValueObject{" +
                 "figure=" + figure +

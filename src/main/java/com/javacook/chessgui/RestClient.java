@@ -11,7 +11,7 @@ import javax.ws.rs.client.ClientBuilder;
  */
 public class RestClient {
 
-    public final static String SERVER_URL = "http://localhost:8080/dddtutorial/chessgames";
+    public final static String SERVER_URL = "http://localhost:8080/dddchess";
 
     public final static Client CLIENT = ClientBuilder.newClient().register(JacksonJsonProvider.class);
 

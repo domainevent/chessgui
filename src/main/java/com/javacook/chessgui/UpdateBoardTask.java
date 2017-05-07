@@ -26,10 +26,10 @@ import static com.javacook.dddchess.domain.FigureValueObject.ColorEnum.WHITE;
  */
 public class UpdateBoardTask extends Task<Object> {
 
-    private final Space[][] spaces;
+    private final ChessBoard chessBoardGui;
 
-    public UpdateBoardTask(Space[][] spaces) {
-        this.spaces = spaces;
+    public UpdateBoardTask(ChessBoard chessBoard) {
+        this.chessBoardGui = chessBoard;
     }
 
     @Override
@@ -37,8 +37,12 @@ public class UpdateBoardTask extends Task<Object> {
         EntityTag entityTag = null;
         while (true) {
             try {
-                TimeUnit.SECONDS.sleep(1);
-                WebTarget webTarget = CLIENT.target(SERVER_URL).path("board");
+                TimeUnit.SECONDS.sleep(2);
+                WebTarget webTarget = CLIENT.target(SERVER_URL)
+                        .path("games")
+                        .path(chessBoardGui.getGameId().id)
+                        .path("board");
+
                 System.out.println("Update call: " + webTarget.getUri());
                 final Invocation.Builder builder = webTarget.request(MediaType.APPLICATION_JSON);
                 if (entityTag != null) {
@@ -57,23 +61,23 @@ public class UpdateBoardTask extends Task<Object> {
                                 for (int j = 0; j < 8; j++) {
                                     final FigureValueObject figure = chessBoard.board[i][j];
                                     if (figure == null) {
-                                        spaces[i][j].setPiece(null);
+                                        chessBoardGui.getSpace(i,j).setPiece(null);
                                     }
                                     else {
                                         boolean isWhite = figure.color == WHITE;
                                         switch (figure.figure) {
                                             case BISHOP:
-                                                spaces[i][j].setPiece(new Bishop(isWhite)); break;
+                                                chessBoardGui.getSpace(i,j).setPiece(new Bishop(isWhite)); break;
                                             case QUEEN:
-                                                spaces[i][j].setPiece(new Queen(isWhite)); break;
+                                                chessBoardGui.getSpace(i,j).setPiece(new Queen(isWhite)); break;
                                             case KING:
-                                                spaces[i][j].setPiece(new King(isWhite)); break;
+                                                chessBoardGui.getSpace(i,j).setPiece(new King(isWhite)); break;
                                             case ROOK:
-                                                spaces[i][j].setPiece(new Rook(isWhite)); break;
+                                                chessBoardGui.getSpace(i,j).setPiece(new Rook(isWhite)); break;
                                             case KNIGHT:
-                                                spaces[i][j].setPiece(new Knight(isWhite)); break;
+                                                chessBoardGui.getSpace(i,j).setPiece(new Knight(isWhite)); break;
                                             case PAWN:
-                                                spaces[i][j].setPiece(new Pawn(isWhite)); break;
+                                                chessBoardGui.getSpace(i,j).setPiece(new Pawn(isWhite)); break;
                                         }
                                     }// if
                                 }// for
