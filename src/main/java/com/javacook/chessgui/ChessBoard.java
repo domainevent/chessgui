@@ -28,6 +28,7 @@ import static javafx.scene.control.Alert.AlertType.*;
 public class ChessBoard extends GridPane {
 
     public final static String SERVER_URL = "http://localhost:8080/dddtutorial/chessgames";
+    public final static Client CLIENT = ClientBuilder.newClient().register(JacksonJsonProvider.class);
 
     private final ChessGUI chessGUI;
     public Space[][] spaces = new Space[8][8];
@@ -102,6 +103,8 @@ public class ChessBoard extends GridPane {
 
         //put pieces in start positions
         this.defineStartPositions();
+
+        new Thread(new UpdateBoardTask(spaces)).start();
     }
 
 
@@ -224,10 +227,7 @@ public class ChessBoard extends GridPane {
     private void newGame(boolean isPlayerWhite) throws Throwable {
         System.out.println("New game, player plays " + (isPlayerWhite? "white" : "black"));
 
-        Client client = ClientBuilder.newClient().register(JacksonJsonProvider.class);
-        WebTarget webTarget = client
-                .target(SERVER_URL)
-                .path("games");
+        WebTarget webTarget = CLIENT.target(SERVER_URL).path("games");
         Form form = new Form();
         form.param("color", isPlayerWhite? "WHITE" : "BLACK");
 
@@ -258,10 +258,7 @@ public class ChessBoard extends GridPane {
     private void processMove(MoveInfo p) throws Throwable {
         System.out.println("Move: " + p);
 
-        Client client = ClientBuilder.newClient().register(JacksonJsonProvider.class);
-        WebTarget webTarget = client
-                .target(SERVER_URL)
-                .path("moves");
+        WebTarget webTarget = CLIENT.target(SERVER_URL).path("moves");
         Form form = new Form();
         form.param("move", p.toString());
         try {
