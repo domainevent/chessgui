@@ -1,6 +1,5 @@
 package com.javacook.chessgui;
 
-import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import com.javacook.chessgui.exception.MoveException;
 import com.javacook.chessgui.exception.NotFoundException;
 import com.javacook.chessgui.exception.RestException;
@@ -11,8 +10,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.layout.GridPane;
 
 import javax.ws.rs.ProcessingException;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Form;
@@ -22,13 +19,12 @@ import javax.ws.rs.core.Response;
 import java.net.ConnectException;
 import java.util.Map;
 
+import static com.javacook.chessgui.RestClient.CLIENT;
+import static com.javacook.chessgui.RestClient.SERVER_URL;
 import static javafx.scene.control.Alert.AlertType.*;
 
 
 public class ChessBoard extends GridPane {
-
-    public final static String SERVER_URL = "http://localhost:8080/dddtutorial/chessgames";
-    public final static Client CLIENT = ClientBuilder.newClient().register(JacksonJsonProvider.class);
 
     private final ChessGUI chessGUI;
     public Space[][] spaces = new Space[8][8];
@@ -73,7 +69,7 @@ public class ChessBoard extends GridPane {
                         chessGUI.showHint(Alert.AlertType.WARNING, "Invalid Move: " + e1.getMessage());
                     }
                     catch (ConnectException e1) {
-                        chessGUI.showHint(WARNING, "No connection to server:\n" + SERVER_URL);
+                        chessGUI.showHint(WARNING, "No connection to server:" + System.lineSeparator() + SERVER_URL);
                     }
                     catch (Throwable e1) {
                         chessGUI.showHint(ERROR, "Unknown Error: " + e1.getMessage());
@@ -86,12 +82,12 @@ public class ChessBoard extends GridPane {
             newGame(playerIsWhite);
         }
         catch (ConnectException e1) {
-            chessGUI.showHint(WARNING, "No connection to server:\n" + SERVER_URL
+            chessGUI.showHint(WARNING, "No connection to server:" + System.lineSeparator() + SERVER_URL
                     + "\nPlease try again later...");
             System.exit(-1);
         }
         catch (NotFoundException e1) {
-            chessGUI.showHint(WARNING, "Communication error. Invalid URI:\n" + e1.getMessage()
+            chessGUI.showHint(WARNING, "Communication error. Invalid URI:" + System.lineSeparator() + e1.getMessage()
                     + "\nPlease contact the administrator (javacook@gmx.de)...");
             System.exit(-1);
         }

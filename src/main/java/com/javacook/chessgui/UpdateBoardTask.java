@@ -16,23 +16,21 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.concurrent.TimeUnit;
 
+import static com.javacook.chessgui.RestClient.CLIENT;
+import static com.javacook.chessgui.RestClient.SERVER_URL;
 import static com.javacook.dddchess.domain.FigureValueObject.ColorEnum.WHITE;
 
 
 /**
- * Created by vollmer on 05.05.17.
+ * For polling the current chess board from the server
  */
 public class UpdateBoardTask extends Task<Object> {
 
-    public final static String SERVER_URL = "http://localhost:8080/dddtutorial/chessgames";
-    public final static Client CLIENT = ClientBuilder.newClient().register(JacksonJsonProvider.class);
     private final Space[][] spaces;
-
 
     public UpdateBoardTask(Space[][] spaces) {
         this.spaces = spaces;
     }
-
 
     @Override
     protected Object call() throws Exception {
@@ -44,7 +42,7 @@ public class UpdateBoardTask extends Task<Object> {
                 System.out.println("Update call: " + webTarget.getUri());
                 final Invocation.Builder builder = webTarget.request(MediaType.APPLICATION_JSON);
                 if (entityTag != null) {
-                    builder.header("If-None-Match", '"' + entityTag.getValue() + '"');
+                    builder.header("If-None-Match", '"'+entityTag.getValue()+'"');
                 }
                 final Response response = builder.get();
                 entityTag = response.getEntityTag();
@@ -88,7 +86,7 @@ public class UpdateBoardTask extends Task<Object> {
                         break;
 
                     default:
-                        System.out.println("Unexpected status code!");
+                        System.out.println("Unexpected status code: " + response.getStatus());
                 }
 
             }
