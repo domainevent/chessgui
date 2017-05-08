@@ -37,7 +37,7 @@ public class UpdateBoardTask extends Task<Object> {
         EntityTag entityTag = null;
         while (true) {
             try {
-                TimeUnit.SECONDS.sleep(2);
+                TimeUnit.SECONDS.sleep(5);
                 WebTarget webTarget = CLIENT.target(SERVER_URL)
                         .path("games")
                         .path(chessBoardGui.getGameId().id)
