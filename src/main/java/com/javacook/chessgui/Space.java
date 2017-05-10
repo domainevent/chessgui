@@ -26,13 +26,17 @@ public class Space extends Button {
     }
 
 
-    // returns true if space is occupied
+    /**
+     * returns true if space is occupied
+     */
     public boolean isOccupied() {
         return (this.piece != null);
     }
 
 
-    // removes piece from space
+    /**
+     * removes piece from space
+     */
     public Piece releasePiece() {
         Piece tmpPiece = this.piece;
         setPiece(null);
@@ -45,7 +49,9 @@ public class Space extends Button {
     }
 
 
-    // Sets the piece, draws image of piece on space
+    /**
+     * Sets the piece, draws image of piece on space
+     */
     public void setPiece(Piece piece) {
         this.piece = piece;
 
