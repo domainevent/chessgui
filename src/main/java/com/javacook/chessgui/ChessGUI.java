@@ -23,6 +23,7 @@ public class ChessGUI extends Application {
     public static void main(String[] args) {
         // Automatic VM reset, thanks to Joseph Rachmuth.
         try {
+            extractAndSetServerUrl(args);
             launch(args);
             System.exit(0);
         }
@@ -32,6 +33,13 @@ public class ChessGUI extends Application {
         }
     }
 
+    private static void extractAndSetServerUrl(String[] args) {
+        for (String arg : args) {
+            if (arg.startsWith("server=")) {
+                RestClient.SERVER_URL = arg.substring(7).trim();
+            }
+        }
+    }
 
     private ChessBoard board;
     private boolean playerIsWhite; // white player = server
@@ -64,6 +72,12 @@ public class ChessGUI extends Application {
     }
 
 
+    @Override
+    public void stop() {
+        // TODO vollmerj: Is there something to do?
+    }
+
+
     /**
      * Starts a new game
      */
@@ -74,20 +88,6 @@ public class ChessGUI extends Application {
         // draw chessboard
         board = new ChessBoard(this, playerIsWhite);
     }
-
-
-    public void stop() {
-        try {
-            // TODO vollmerj: Is there something to do?
-        }
-        catch (NullPointerException e) {
-            // Nothing to close. Connention never initialized and/or established
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 
     /**
      * Prompts the player to choose team color
