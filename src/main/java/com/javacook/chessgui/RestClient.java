@@ -11,7 +11,9 @@ import javax.ws.rs.client.ClientBuilder;
  */
 public class RestClient {
 
-    public final static String SERVER_URL = "http://localhost:8080/dddchess";
+    public final static String DEFAULT_SERVER_URL = "http://localhost:8080/dddchess/api";
+
+    public static String SERVER_URL = DEFAULT_SERVER_URL;
 
     public final static Client CLIENT = ClientBuilder.newClient().register(JacksonJsonProvider.class);
 
