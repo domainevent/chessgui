@@ -11,7 +11,8 @@ import javax.ws.rs.client.ClientBuilder;
  */
 public class RestClient {
 
-    public final static String DEFAULT_SERVER_URL = "http://localhost:8080/dddchess/api";
+//    public final static String DEFAULT_SERVER_URL = "http://localhost:8080/dddchess/api";
+    public final static String DEFAULT_SERVER_URL = "http://localhost:8080/dddschach/api";
 
     public static String SERVER_URL = DEFAULT_SERVER_URL;
 
