@@ -41,13 +41,14 @@ public class ChessGUI extends Application {
         }
     }
 
+    public final static GUITexts TEXTS = new GUITexts();
     private ChessBoard board;
     private boolean playerIsWhite; // white player = server
 
 
     @Override
     public void start(Stage mainStage) {
-        mainStage.setTitle("Chess Game");
+        mainStage.setTitle(TEXTS.title());
         mainStage.getIcons().add(new Image("assets/icons/app_icon.png"));
 
         BorderPane root = new BorderPane();
@@ -95,12 +96,12 @@ public class ChessGUI extends Application {
     public void choosePlayerColor() {
         // Prompt user for new game
         Alert newGameAlert = new Alert(AlertType.CONFIRMATION);
-        newGameAlert.setTitle("Start new game");
+        newGameAlert.setTitle(TEXTS.alertTitleNewGame());
         newGameAlert.setHeaderText(null);
-        newGameAlert.setContentText("Pick your color");
+        newGameAlert.setContentText(TEXTS.alertTitlePickColor());
 
-        ButtonType buttonTypeWhite = new ButtonType("White");
-        ButtonType buttonTypeBlack = new ButtonType("Black");
+        ButtonType buttonTypeWhite = new ButtonType(TEXTS.buttonLabelColorWhite());
+        ButtonType buttonTypeBlack = new ButtonType(TEXTS.buttonLabelColorBlack());
 
         newGameAlert.getButtonTypes().setAll(buttonTypeWhite, buttonTypeBlack);
         Optional<ButtonType> result = newGameAlert.showAndWait();
@@ -123,7 +124,7 @@ public class ChessGUI extends Application {
      */
     public void showHint(AlertType alertType, String hint) {
         Alert newGameAlert = new Alert(alertType);
-        newGameAlert.setTitle("Hint");
+        newGameAlert.setTitle(TEXTS.alertTitleHint());
         newGameAlert.setHeaderText(null);
         newGameAlert.setContentText(hint);
 
@@ -149,7 +150,7 @@ public class ChessGUI extends Application {
      */
     public void onDisplayAbout() {
         Alert infoAlert = new Alert(AlertType.INFORMATION);
-        infoAlert.setTitle("About this program");
+        infoAlert.setTitle(TEXTS.alertTitleInfo());
         infoAlert.setHeaderText(null);
 
         // set window icon
@@ -174,24 +175,27 @@ public class ChessGUI extends Application {
     private MenuBar generateMenuBar() {
         MenuBar menuBar = new MenuBar();
 
-        Menu gameMenu = new Menu("Game");
+//        Menu gameMenu = new Menu("Game");
+        Menu gameMenu = new Menu(TEXTS.menuLabelGame());
         menuBar.getMenus().add(gameMenu);
 
+// TODO: javacook later
+//        MenuItem menuItemNewGame = new MenuItem("New Game");
+//        menuItemNewGame.setOnAction(e -> onNewGame());
+//        menuItemNewGame.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
+//        gameMenu.getItems().add(menuItemNewGame);
 
-        MenuItem menuItemNewGame = new MenuItem("New Game");
-        menuItemNewGame.setOnAction(e -> onNewGame());
-        menuItemNewGame.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
-        gameMenu.getItems().add(menuItemNewGame);
-
-        MenuItem menuItemQuit = new MenuItem("Quit");
+//        MenuItem menuItemQuit = new MenuItem("Quit");
+        MenuItem menuItemQuit = new MenuItem(TEXTS.menuLabelGameQuit());
         menuItemQuit.setOnAction(e -> onQuit());
         menuItemQuit.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN));
         gameMenu.getItems().add(menuItemQuit);
 
-        Menu menuHelp = new Menu("Help");
+//        Menu menuHelp = new Menu("Help");
+        Menu menuHelp = new Menu(TEXTS.menuLabelHelp());
         menuBar.getMenus().add(menuHelp);
 
-        MenuItem menuItemAbout = new MenuItem("About");
+        MenuItem menuItemAbout = new MenuItem(TEXTS.menuLabelHelpAbout());
         //menuItemAbout.setGraphic( new ImageView( new Image("assets/icons/about.png", 16, 16, true, true) ) );
         // Note: Accelerator F1 does not work if TextField is
         //       in focus. This is a known issue in JavaFX.

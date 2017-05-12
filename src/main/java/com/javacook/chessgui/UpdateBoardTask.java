@@ -50,8 +50,9 @@ public class UpdateBoardTask extends Task<Object> {
                 }
                 final Response response = builder.get();
                 entityTag = response.getEntityTag();
+                String eTagValue = (entityTag == null)? "<not present>" : entityTag.getValue();
 
-                System.out.println("Status: " + response.getStatus() + ", ETag: " + entityTag.getValue());
+                System.out.println("Status: " + response.getStatus() + ", ETag: " + eTagValue);
                 switch (response.getStatus()) {
                     case 200:
                         final ChessBoardValueObject chessBoard = response.readEntity(ChessBoardValueObject.class);

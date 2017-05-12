@@ -215,7 +215,7 @@ public class ChessBoard extends GridPane {
 
         WebTarget webTarget = CLIENT.target(SERVER_URL).path("games");
         Form form = new Form();
-        form.param("color", isPlayerWhite? "WHITE" : "BLACK");
+        form.param("note", "A new chess game started by the client 'chessgui'");
 
         try {
             final Response response = webTarget
