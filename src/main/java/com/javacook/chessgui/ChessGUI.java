@@ -36,7 +36,11 @@ public class ChessGUI extends Application {
     private static void extractAndSetServerUrl(String[] args) {
         for (String arg : args) {
             if (arg.startsWith("server=")) {
-                RestClient.SERVER_URL = arg.substring(7).trim();
+                String serverUrl = arg.substring(7).trim();
+                if (!serverUrl.startsWith("http")) {
+                    serverUrl = "http://" + serverUrl;
+                }
+                RestClient.SERVER_URL = serverUrl;
             }
         }
     }
