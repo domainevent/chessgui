@@ -18,6 +18,7 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.ConnectException;
+import java.net.UnknownHostException;
 import java.util.Map;
 
 import static com.javacook.chessgui.RestClient.CLIENT;
@@ -87,22 +88,22 @@ public class ChessBoard extends GridPane {
         }
 
         try {
-            newGame(playerIsWhite);
+            postNewGame(playerIsWhite);
         }
         catch (ConnectException e1) {
             chessGUI.showHint(WARNING, "No connection to server:" + System.lineSeparator() + SERVER_URL
                     + System.lineSeparator() + "Please try again later...");
-            System.exit(-1);
+            System.exit(-3);
         }
-        catch (NotFoundException e1) {
+        catch (NotFoundException | UnknownHostException e1) {
             chessGUI.showHint(WARNING, "Communication error. Invalid URI:" + System.lineSeparator() + e1.getMessage()
-                    + System.lineSeparator() + "Please contact the administrator (javacook@gmx.de)...");
-            System.exit(-1);
+                    + System.lineSeparator() + "Please contact the administrator javacook@gmx.de");
+            System.exit(-2);
         }
         catch (Throwable e1) {
-            chessGUI.showHint(ERROR, "Unknown error: " + e1.getMessage()
-                    + System.lineSeparator() + "Please contact the administrator (javacook@gmx.de)!");
-            System.exit(-2);
+            chessGUI.showHint(ERROR, "Unknown error: " + e1
+                    + System.lineSeparator() + "Please contact the administrator javacook@gmx.de");
+            System.exit(-1);
         }
 
         //put pieces in start positions
@@ -210,7 +211,7 @@ public class ChessBoard extends GridPane {
     }
 
 
-    private void newGame(boolean isPlayerWhite) throws Throwable {
+    private void postNewGame(boolean isPlayerWhite) throws Throwable {
         System.out.println("New game, player plays " + (isPlayerWhite? "white" : "black"));
 
         WebTarget webTarget = CLIENT.target(SERVER_URL).path("games");
