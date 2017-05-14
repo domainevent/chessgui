@@ -104,24 +104,36 @@ public class ChessGUI extends Application {
      * Creates a alert box showing the text <code>hint</code>.
      * @param hint text being displayed
      */
-    public void showHint(AlertType alertType, String hint) {
-        Alert newGameAlert = new Alert(alertType);
-        newGameAlert.setTitle(TEXTS.alertTitleHint());
-        newGameAlert.setHeaderText(null);
-        newGameAlert.setContentText(hint);
-
-        ButtonType buttonTypeWhite = new ButtonType("OK");
-        newGameAlert.getButtonTypes().setAll(buttonTypeWhite);
-        Optional<ButtonType> result = newGameAlert.showAndWait();
+    public Optional<ButtonType> showHint(AlertType alertType, String hint) {
+        Alert alertBox = new Alert(alertType);
+        alertBox.setTitle(TEXTS.alertTitleHint());
+        alertBox.setHeaderText(null);
+        alertBox.setContentText(hint);
+        return alertBox.showAndWait();
     }
 
 
-
+    /**
+     * Shows the GameId
+     */
+    private void onGameId() {
+        Alert newGameAlert = new Alert(AlertType.INFORMATION);
+        newGameAlert.setTitle(TEXTS.alertTitleHint());
+        newGameAlert.setHeaderText("Die Spiel-Id lautet");
+        newGameAlert.setContentText("Was ist das?");
+        TextField textField = new TextField(board.getGameId().id);
+        textField.setEditable(false);
+        textField.setMaxWidth(300);
+        Platform.runLater(() -> textField.requestFocus());
+        newGameAlert.getDialogPane().setContent(textField);
+        newGameAlert.getDialogPane().setMinWidth(333);
+        Optional<ButtonType> result = newGameAlert.showAndWait();
+    }
 
     /**
      * Quits program
      */
-    public void onQuit() {
+    private void onQuit() {
         Platform.exit();
         System.exit(0);
     }
@@ -142,12 +154,61 @@ public class ChessGUI extends Application {
         // the graphic replaces the standard icon on the left
         //infoAlert.setGraphic( new ImageView( new Image("assets/icons/cat.png", 64, 64, true, true) ) );
 
-        infoAlert.setContentText("Programmed by Maxwell Sirotin and Steven Vascellaro.\n\n" +
-                "Chess icons by \"Colin M.L. Burnett\".\n\n" +
-                "App icon by BlackVariant.\n\n" +
-                "Modified for dddchess (a Domain Driven Design tutorial) " +
-                "by Jörg Vollmer (javacook).");
+        infoAlert.setContentText(TEXTS.altetTextInfo());
         infoAlert.showAndWait();
+    }
+
+
+    void generateStartDialog() {
+        // Create the custom dialog.
+        Dialog<Pair<String, Boolean>> dialog = new Dialog<>();
+        dialog.setTitle("Start-Dialog");
+
+        dialog.setHeaderText(TEXTS.startDialogWelcomeText());
+        // Set the icon (must be included in the project).
+        dialog.setGraphic(new ImageView(this.getClass().getResource("/assets/icons/app_icon.png").toString()));
+
+        // Set the button types.
+        ButtonType buttonTypeWhite = new ButtonType(TEXTS.buttonLabelColorWhite());
+        ButtonType buttonTypeBlack = new ButtonType(TEXTS.buttonLabelColorBlack());
+        dialog.getDialogPane().getButtonTypes().addAll(buttonTypeWhite, buttonTypeBlack);
+
+        // Create the username and password labels and fields.
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 20, 10, 20));
+
+        TextField gameIdTextField = new TextField();
+        gameIdTextField.setMinWidth(300);
+
+        final ToggleGroup toggleGroup = new ToggleGroup();
+        RadioButton newGameBut = new RadioButton(TEXTS.startDialogLabelNewGame());
+        newGameBut.setSelected(true);
+        RadioButton joinGame = new RadioButton(TEXTS.startDialogLabelWithId());
+        joinGame.setOnAction(t -> {
+            gameIdTextField.requestFocus();
+        });
+        newGameBut.setToggleGroup(toggleGroup);
+        joinGame.setToggleGroup(toggleGroup);
+
+
+        grid.add(newGameBut, 0, 0);
+        grid.add(joinGame, 0, 1);
+        grid.add(gameIdTextField, 1, 1);
+
+        dialog.getDialogPane().setContent(grid);
+
+        dialog.setResultConverter(dialogButton ->
+                new Pair<>(gameIdTextField.getText(), dialogButton != buttonTypeBlack)
+        );
+
+        Optional<Pair<String, Boolean>> result = dialog.showAndWait();
+
+        result.ifPresent(gameIdAndColor -> {
+            playerIsWhite = gameIdAndColor.getValue();
+            gameId = gameIdAndColor.getKey();
+        });
     }
 
 
@@ -159,6 +220,11 @@ public class ChessGUI extends Application {
 
         Menu gameMenu = new Menu(TEXTS.menuLabelGame());
         menuBar.getMenus().add(gameMenu);
+
+        MenuItem menuItemGameId = new MenuItem("Spiel-Id");
+        menuItemGameId.setOnAction(e -> onGameId());
+        menuItemGameId.setAccelerator(new KeyCodeCombination(KeyCode.I, KeyCombination.CONTROL_DOWN));
+        gameMenu.getItems().add(menuItemGameId);
 
         MenuItem menuItemQuit = new MenuItem(TEXTS.menuLabelGameQuit());
         menuItemQuit.setOnAction(e -> onQuit());
@@ -181,87 +247,4 @@ public class ChessGUI extends Application {
     }
 
 
-    /**
-     * Prompts the player to choose team color
-     */
-    public void choosePlayerColor() {
-        // Prompt user for new game
-        Alert newGameAlert = new Alert(AlertType.CONFIRMATION);
-        newGameAlert.setTitle(TEXTS.alertTitleNewGame());
-        newGameAlert.setHeaderText(null);
-        newGameAlert.setContentText(TEXTS.alertTitlePickColor());
-
-        ButtonType buttonTypeWhite = new ButtonType(TEXTS.buttonLabelColorWhite());
-        ButtonType buttonTypeBlack = new ButtonType(TEXTS.buttonLabelColorBlack());
-
-        newGameAlert.getButtonTypes().setAll(buttonTypeWhite, buttonTypeBlack);
-        Optional<ButtonType> result = newGameAlert.showAndWait();
-
-        if (result.get() == buttonTypeWhite) {
-            this.playerIsWhite = true;
-        }
-        else if (result.get() == buttonTypeBlack) {
-            this.playerIsWhite = false;
-        }
-        else {
-            this.playerIsWhite = true;
-        }
-    }
-
-
-    void generateStartDialog() {
-        // Create the custom dialog.
-        Dialog<Pair<String, Boolean>> dialog = new Dialog<>();
-        dialog.setTitle("Start-Dialog");
-        dialog.setHeaderText("Willkommen zu ChessGUI!" + CR + CR +
-                "Die GUI für DDD-Schach," + CR +
-                "einem Schach-Server für" + CR +
-                "verteilte Schach-Partien.");
-
-        // Set the icon (must be included in the project).
-        dialog.setGraphic(new ImageView(this.getClass().getResource("/assets/icons/app_icon.png").toString()));
-
-        // Set the button types.
-        ButtonType buttonTypeWhite = new ButtonType(TEXTS.buttonLabelColorWhite());
-        ButtonType buttonTypeBlack = new ButtonType(TEXTS.buttonLabelColorBlack());
-        dialog.getDialogPane().getButtonTypes().addAll(buttonTypeWhite, buttonTypeBlack);
-
-        // Create the username and password labels and fields.
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(20, 150, 10, 10));
-
-        final ToggleGroup toggleGroup = new ToggleGroup();
-        RadioButton newGameBut = new RadioButton("Neues Spiel");
-        newGameBut.setSelected(true);
-        RadioButton joinGame = new RadioButton("Spiel mit Id");
-        newGameBut.setToggleGroup(toggleGroup);
-        joinGame.setToggleGroup(toggleGroup);
-
-        TextField gameIdTextField = new TextField();
-//        gameId.setPromptText("Spiel-Id");
-
-        grid.add(newGameBut, 0, 0);
-//        grid.add(newGame, 1, 0);
-        grid.add(joinGame, 0, 1);
-        grid.add(gameIdTextField, 1, 1);
-
-        dialog.getDialogPane().setContent(grid);
-
-//        // Request focus on the username field by default.
-//        Platform.runLater(() -> username.requestFocus());
-
-        // Convert the result to a username-password-pair when the login button is clicked.
-        dialog.setResultConverter(dialogButton -> {
-                    return new Pair<String, Boolean>(gameIdTextField.getText(), dialogButton != buttonTypeBlack);
-        });
-
-        Optional<Pair<String, Boolean>> result = dialog.showAndWait();
-
-        result.ifPresent(gameIdAndColor -> {
-            playerIsWhite = gameIdAndColor.getValue();
-            gameId = gameIdAndColor.getKey();
-        });
-    }
 }

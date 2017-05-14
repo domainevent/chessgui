@@ -5,6 +5,8 @@ package com.javacook.chessgui;
  */
 public class GUITexts {
 
+    public final static String CR = System.lineSeparator();
+
     public String title() {
         return "DDD-Schach"; // "Chess Game"
     }
@@ -30,13 +32,20 @@ public class GUITexts {
 
 
 
-    public String alertTitleNewGame() {
+    public String startDialogLabelNewGame() {
         return "Neues Spiel"; // "Start new game"
     }
 
 
-    public String alertTitlePickColor() {
-        return "Wähle Deine Farbe"; // "Pick your color"
+    public String startDialogLabelWithId() {
+        return "Spiel mit Id"; // "Game with id"
+    }
+
+    public String startDialogWelcomeText() {
+        return "Willkommen zu ChessGUI!" + CR + CR +
+                "Die GUI für DDD-Schach," + CR +
+                "einem Schach-Server für" + CR +
+                "verteilte Schach-Partien.";
     }
 
 
@@ -59,5 +68,11 @@ public class GUITexts {
     }
 
 
+    public String altetTextInfo() {
+        return "Entwickelt ursprünglich von M. Sirotin, S. Vascellaro" + CR + CR +
+                "Design der Schach-Figuren von Colin M.L. Burnett" + CR + CR +
+                "Angepasst für DDD-Schach von Jörg Vollmer," + CR +
+                "E-Mail: info@informatikbuero.com";
+    }
 
 }
