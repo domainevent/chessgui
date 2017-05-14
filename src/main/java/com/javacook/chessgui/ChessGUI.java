@@ -2,15 +2,20 @@ package com.javacook.chessgui;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 
 import java.util.Optional;
 
@@ -45,9 +50,20 @@ public class ChessGUI extends Application {
         }
     }
 
+    public final static String CR = System.lineSeparator();
     public final static GUITexts TEXTS = new GUITexts();
     private ChessBoard board;
     private boolean playerIsWhite; // white player = server
+    private String gameId;
+
+
+    public boolean isPlayerIsWhite() {
+        return playerIsWhite;
+    }
+
+    public String getGameId() {
+        return gameId;
+    }
 
 
     @Override
@@ -63,10 +79,11 @@ public class ChessGUI extends Application {
         mainScene.getStylesheets().add("assets/stylesheet.css");
 
         // prompt user to select team color
-        choosePlayerColor();
+        generateStartDialog();
+//        choosePlayerColor();
 
         // draw chessboard
-        board = new ChessBoard(this, playerIsWhite);
+        board = new ChessBoard(this);
         root.setCenter(board); // sized 400x400
 
         // add menuBar
@@ -80,45 +97,6 @@ public class ChessGUI extends Application {
     @Override
     public void stop() {
         // TODO vollmerj: Is there something to do?
-    }
-
-
-    /**
-     * Starts a new game
-     */
-    public void onNewGame() {
-        // prompt user to select team color
-        choosePlayerColor();
-
-        // draw chessboard
-        board = new ChessBoard(this, playerIsWhite);
-    }
-
-    /**
-     * Prompts the player to choose team color
-     */
-    public void choosePlayerColor() {
-        // Prompt user for new game
-        Alert newGameAlert = new Alert(AlertType.CONFIRMATION);
-        newGameAlert.setTitle(TEXTS.alertTitleNewGame());
-        newGameAlert.setHeaderText(null);
-        newGameAlert.setContentText(TEXTS.alertTitlePickColor());
-
-        ButtonType buttonTypeWhite = new ButtonType(TEXTS.buttonLabelColorWhite());
-        ButtonType buttonTypeBlack = new ButtonType(TEXTS.buttonLabelColorBlack());
-
-        newGameAlert.getButtonTypes().setAll(buttonTypeWhite, buttonTypeBlack);
-        Optional<ButtonType> result = newGameAlert.showAndWait();
-
-        if (result.get() == buttonTypeWhite) {
-            this.playerIsWhite = true;
-        }
-        else if (result.get() == buttonTypeBlack) {
-            this.playerIsWhite = false;
-        }
-        else {
-            this.playerIsWhite = true;
-        }
     }
 
 
@@ -179,23 +157,14 @@ public class ChessGUI extends Application {
     private MenuBar generateMenuBar() {
         MenuBar menuBar = new MenuBar();
 
-//        Menu gameMenu = new Menu("Game");
         Menu gameMenu = new Menu(TEXTS.menuLabelGame());
         menuBar.getMenus().add(gameMenu);
 
-// TODO: javacook later
-//        MenuItem menuItemNewGame = new MenuItem("New Game");
-//        menuItemNewGame.setOnAction(e -> onNewGame());
-//        menuItemNewGame.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
-//        gameMenu.getItems().add(menuItemNewGame);
-
-//        MenuItem menuItemQuit = new MenuItem("Quit");
         MenuItem menuItemQuit = new MenuItem(TEXTS.menuLabelGameQuit());
         menuItemQuit.setOnAction(e -> onQuit());
         menuItemQuit.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN));
         gameMenu.getItems().add(menuItemQuit);
 
-//        Menu menuHelp = new Menu("Help");
         Menu menuHelp = new Menu(TEXTS.menuLabelHelp());
         menuBar.getMenus().add(menuHelp);
 
@@ -209,5 +178,90 @@ public class ChessGUI extends Application {
         menuHelp.getItems().add(menuItemAbout);
 
         return menuBar;
+    }
+
+
+    /**
+     * Prompts the player to choose team color
+     */
+    public void choosePlayerColor() {
+        // Prompt user for new game
+        Alert newGameAlert = new Alert(AlertType.CONFIRMATION);
+        newGameAlert.setTitle(TEXTS.alertTitleNewGame());
+        newGameAlert.setHeaderText(null);
+        newGameAlert.setContentText(TEXTS.alertTitlePickColor());
+
+        ButtonType buttonTypeWhite = new ButtonType(TEXTS.buttonLabelColorWhite());
+        ButtonType buttonTypeBlack = new ButtonType(TEXTS.buttonLabelColorBlack());
+
+        newGameAlert.getButtonTypes().setAll(buttonTypeWhite, buttonTypeBlack);
+        Optional<ButtonType> result = newGameAlert.showAndWait();
+
+        if (result.get() == buttonTypeWhite) {
+            this.playerIsWhite = true;
+        }
+        else if (result.get() == buttonTypeBlack) {
+            this.playerIsWhite = false;
+        }
+        else {
+            this.playerIsWhite = true;
+        }
+    }
+
+
+    void generateStartDialog() {
+        // Create the custom dialog.
+        Dialog<Pair<String, Boolean>> dialog = new Dialog<>();
+        dialog.setTitle("Start-Dialog");
+        dialog.setHeaderText("Willkommen zu ChessGUI!" + CR + CR +
+                "Die GUI für DDD-Schach," + CR +
+                "einem Schach-Server für" + CR +
+                "verteilte Schach-Partien.");
+
+        // Set the icon (must be included in the project).
+        dialog.setGraphic(new ImageView(this.getClass().getResource("/assets/icons/app_icon.png").toString()));
+
+        // Set the button types.
+        ButtonType buttonTypeWhite = new ButtonType(TEXTS.buttonLabelColorWhite());
+        ButtonType buttonTypeBlack = new ButtonType(TEXTS.buttonLabelColorBlack());
+        dialog.getDialogPane().getButtonTypes().addAll(buttonTypeWhite, buttonTypeBlack);
+
+        // Create the username and password labels and fields.
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+
+        final ToggleGroup toggleGroup = new ToggleGroup();
+        RadioButton newGameBut = new RadioButton("Neues Spiel");
+        newGameBut.setSelected(true);
+        RadioButton joinGame = new RadioButton("Spiel mit Id");
+        newGameBut.setToggleGroup(toggleGroup);
+        joinGame.setToggleGroup(toggleGroup);
+
+        TextField gameIdTextField = new TextField();
+//        gameId.setPromptText("Spiel-Id");
+
+        grid.add(newGameBut, 0, 0);
+//        grid.add(newGame, 1, 0);
+        grid.add(joinGame, 0, 1);
+        grid.add(gameIdTextField, 1, 1);
+
+        dialog.getDialogPane().setContent(grid);
+
+//        // Request focus on the username field by default.
+//        Platform.runLater(() -> username.requestFocus());
+
+        // Convert the result to a username-password-pair when the login button is clicked.
+        dialog.setResultConverter(dialogButton -> {
+                    return new Pair<String, Boolean>(gameIdTextField.getText(), dialogButton != buttonTypeBlack);
+        });
+
+        Optional<Pair<String, Boolean>> result = dialog.showAndWait();
+
+        result.ifPresent(gameIdAndColor -> {
+            playerIsWhite = gameIdAndColor.getValue();
+            gameId = gameIdAndColor.getKey();
+        });
     }
 }

@@ -20,6 +20,7 @@ import javax.ws.rs.core.Response;
 import java.net.ConnectException;
 import java.net.UnknownHostException;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.javacook.chessgui.RestClient.CLIENT;
 import static com.javacook.chessgui.RestClient.SERVER_URL;
@@ -30,7 +31,7 @@ public class ChessBoard extends GridPane {
 
     private final boolean playerIsWhite;
     private Space[][] spaces = new Space[8][8];
-    private GameIdValueObject gameId;
+    private Optional<GameIdValueObject> gameId;
 
     /**
      * last clicked space
@@ -38,16 +39,23 @@ public class ChessBoard extends GridPane {
     private Space activeSpace = null;
 
     public GameIdValueObject getGameId() {
-        return gameId;
+        if (!gameId.isPresent()) {
+            throw new IllegalStateException("Value of gameId not present!");
+        }
+        return gameId.get();
     }
 
     /**
      * Constructor
      * @param chessGUI
-     * @param playerIsWhite
      */
-    public ChessBoard(ChessGUI chessGUI, boolean playerIsWhite) {
-        this.playerIsWhite = playerIsWhite;
+    public ChessBoard(ChessGUI chessGUI) {
+        playerIsWhite = chessGUI.isPlayerIsWhite();
+        final String gameIdStr = chessGUI.getGameId();
+        if (gameIdStr != null && !gameIdStr.trim().isEmpty()) {
+            this.gameId = Optional.of(new GameIdValueObject(gameIdStr));
+        }
+
         // initialize 8x8 array of spaces
         for (int x = 0; x < spaces[0].length; x++) {
             for (int y = 0; y < spaces[1].length; y++) {
@@ -88,7 +96,9 @@ public class ChessBoard extends GridPane {
         }
 
         try {
-            postNewGame(playerIsWhite);
+            if (this.gameId == null) {
+                postNewGame(playerIsWhite);
+            }
         }
         catch (ConnectException e1) {
             chessGUI.showHint(WARNING, "No connection to server:" + System.lineSeparator() + SERVER_URL
@@ -133,14 +143,6 @@ public class ChessBoard extends GridPane {
         if (activeSpace != null) {
             activeSpace.getStyleClass().add("chess-space-active");
         }
-    }
-
-
-    /**
-     * Use this to get a space, using GridPane methods will (I think) cause color problems
-     */
-    public Space getActiveSpace() {
-        return this.activeSpace;
     }
 
 
@@ -224,7 +226,7 @@ public class ChessBoard extends GridPane {
                     .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
 
             switch (response.getStatus()) {
-                case 200: gameId = response.readEntity(GameIdValueObject.class);
+                case 200: gameId = Optional.ofNullable(response.readEntity(GameIdValueObject.class));
                     break;
                 case 404:
                     throw new NotFoundException(webTarget.getUri());
@@ -247,7 +249,7 @@ public class ChessBoard extends GridPane {
         System.out.println("Move: " + p);
 
         WebTarget webTarget = CLIENT.target(SERVER_URL)
-                .path("games").path(gameId.id).path("moves");
+                .path("games").path(gameId.get().id).path("moves");
 
         Form form = new Form();
         form.param("move", p.toString());
@@ -261,7 +263,6 @@ public class ChessBoard extends GridPane {
                     response.readEntity(new GenericType<Map<String, Object>>() {});
 
             System.out.println("Response" + json);
-            boolean success = json.containsKey("move index");
 
             switch (response.getStatus()) {
                 case 200:
