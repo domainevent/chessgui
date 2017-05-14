@@ -119,8 +119,7 @@ public class ChessGUI extends Application {
     private void onGameId() {
         Alert newGameAlert = new Alert(AlertType.INFORMATION);
         newGameAlert.setTitle(TEXTS.alertTitleHint());
-        newGameAlert.setHeaderText("Die Spiel-Id lautet");
-        newGameAlert.setContentText("Was ist das?");
+        newGameAlert.setHeaderText(TEXTS.alertLabelGameIdIs());
         TextField textField = new TextField(board.getGameId().id);
         textField.setEditable(false);
         textField.setMaxWidth(300);
@@ -162,7 +161,7 @@ public class ChessGUI extends Application {
     void generateStartDialog() {
         // Create the custom dialog.
         Dialog<Pair<String, Boolean>> dialog = new Dialog<>();
-        dialog.setTitle("Start-Dialog");
+        dialog.setTitle(TEXTS.startDialogTitle());
 
         dialog.setHeaderText(TEXTS.startDialogWelcomeText());
         // Set the icon (must be included in the project).
@@ -221,7 +220,7 @@ public class ChessGUI extends Application {
         Menu gameMenu = new Menu(TEXTS.menuLabelGame());
         menuBar.getMenus().add(gameMenu);
 
-        MenuItem menuItemGameId = new MenuItem("Spiel-Id");
+        MenuItem menuItemGameId = new MenuItem(TEXTS.menuLabelGameId());
         menuItemGameId.setOnAction(e -> onGameId());
         menuItemGameId.setAccelerator(new KeyCodeCombination(KeyCode.I, KeyCombination.CONTROL_DOWN));
         gameMenu.getItems().add(menuItemGameId);

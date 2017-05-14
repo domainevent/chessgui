@@ -25,17 +25,22 @@ public class GUITexts {
         return "Hilfe"; // "Help"
     }
 
+    public String menuLabelGameId() {
+        return "Spiel-Id"; // "Help"
+    }
 
     public String menuLabelHelpAbout() {
         return "Über";
     }
 
 
+    public String startDialogTitle() {
+        return "DDD-Schach";
+    }
 
     public String startDialogLabelNewGame() {
         return "Neues Spiel"; // "Start new game"
     }
-
 
     public String startDialogLabelWithId() {
         return "Spiel mit Id"; // "Game with id"
@@ -74,5 +79,10 @@ public class GUITexts {
                 "Angepasst für DDD-Schach von Jörg Vollmer," + CR +
                 "E-Mail: info@informatikbuero.com";
     }
+
+    public String alertLabelGameIdIs() {
+        return "Die Spiel-Id lautet";
+    }
+
 
 }
