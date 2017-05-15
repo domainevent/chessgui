@@ -7,7 +7,7 @@ vervollständigen) oder dddchess (Prototyp). Wird dddschach verwendet
 muss nichts gesondert konfiguriert werden. 
 
 ### Starten
-Die GUI lässt sich mit <tt>mvn exec:java</tt> direkt starten.
+Die GUI lässt sich mit <tt>mvn install exec:java</tt> direkt starten.
 
 **Hinweis:** ChessGUI verbindet sich per Default mit dem 
 **dddschach**-Server unter <tt>http://localhost:8080/dddschach/api</tt>. 
