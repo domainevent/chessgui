@@ -96,7 +96,8 @@ public class UpdateBoardTask extends Task<Object> {
 
             }
             catch (Exception e) {
-                e.printStackTrace();
+                // FIXME: vollmerj: hier evtl. eine Fehlerbox?
+                System.err.println(e);
             }
         }
     }
