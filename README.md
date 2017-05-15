@@ -7,7 +7,7 @@ vervollständigen) oder dddchess (Prototyp). Wird dddschach verwendet
 muss nichts gesondert konfiguriert werden. 
 
 ### Starten
-Die GUI lässt sich mit <tt>mvn install exec:java</tt> direkt starten.
+Die GUI lässt sich mit <tt>mvn exec:java</tt> direkt starten.
 
 **Hinweis:** ChessGUI verbindet sich per Default mit dem 
 **dddschach**-Server unter <tt>http://localhost:8080/dddschach/api</tt>. 
@@ -23,6 +23,9 @@ dieser Partie und teilt sie seinem Mitspieler mit. Dieser kann die ID dann bei
 beim Start seiner ChessGUI eingeben. Anschließend synchronisieren die 
 beiden ChessGUIs in regelmäßigen Abständen ihre Stellungen.
 
+**Fehler:** Es kam einmal vor, dass beim Start eine  <tt>ClassNotFoundException: 
+com.javacook.chessgui.ChessGUI</tt> auftrat. Dann half ein 
+<tt>mvn clean install</tt> vor <tt>mvn exec:java</tt>.
 
 Viel Spaß...
 
