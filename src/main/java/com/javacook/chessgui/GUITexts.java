@@ -26,7 +26,7 @@ public class GUITexts {
     }
 
     public String menuLabelGameId() {
-        return "Spiel-Id"; // "Help"
+        return "Spiel-ID"; // "Game ID"
     }
 
     public String menuLabelHelpAbout() {
@@ -43,7 +43,7 @@ public class GUITexts {
     }
 
     public String startDialogLabelWithId() {
-        return "Spiel mit Id"; // "Game with id"
+        return "Spiel mit ID"; // "Game with id"
     }
 
     public String startDialogWelcomeText() {
