@@ -2,6 +2,8 @@ package com.javacook.chessgui;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -198,18 +200,20 @@ public class ChessGUI extends Application {
         newGameBut.setToggleGroup(toggleGroup);
         joinGame.setToggleGroup(toggleGroup);
 
-        newGameBut.setOnAction(e -> {
-            buttonWhite.setDisable(false);
-            buttonBlack.setDisable(false);
-            gameIdTextField.setDisable(true);
-        });
 
-        joinGame.setOnAction(e -> {
-            boolean isGameIdEmpty = gameIdTextField.getText().trim().isEmpty();
-            buttonWhite.setDisable(isGameIdEmpty);
-            buttonBlack.setDisable(isGameIdEmpty);
-            gameIdTextField.setDisable(false);
-            gameIdTextField.requestFocus();
+        toggleGroup.selectedToggleProperty().addListener((ov, old_toggle, new_toggle) -> {
+            if (new_toggle == newGameBut) {
+                buttonWhite.setDisable(false);
+                buttonBlack.setDisable(false);
+                gameIdTextField.setDisable(true);
+            }
+            else if (new_toggle == joinGame) {
+                boolean isGameIdEmpty = gameIdTextField.getText().trim().isEmpty();
+                buttonWhite.setDisable(isGameIdEmpty);
+                buttonBlack.setDisable(isGameIdEmpty);
+                gameIdTextField.setDisable(false);
+                Platform.runLater(() -> gameIdTextField.requestFocus());
+            }
         });
 
         gameIdTextField.setOnKeyTyped(e -> {
