@@ -32,7 +32,7 @@ public class ChessBoard extends GridPane {
 
     private final boolean playerIsWhite;
     private Space[][] spaces = new Space[8][8];
-    private Optional<GameIdValueObject> gameId;
+    private Optional<GameIdValueObject> gameId = Optional.empty();
 
     /**
      * last clicked space
@@ -48,10 +48,13 @@ public class ChessBoard extends GridPane {
 
     /**
      * Constructor
-     * @param chessGUI
+     * @param chessGUI the GUI class for call backs
      */
     public ChessBoard(ChessGUI chessGUI) {
+
         playerIsWhite = chessGUI.isPlayerIsWhite();
+
+        // Checks whether the user has entered a gameId manually
         final String gameIdStr = chessGUI.getGameId();
         if (gameIdStr != null && !gameIdStr.trim().isEmpty()) {
             this.gameId = Optional.of(new GameIdValueObject(gameIdStr));
@@ -81,24 +84,26 @@ public class ChessBoard extends GridPane {
                         onSpaceClick(xVal, yVal);
                     }
                     catch (TimeoutException e1) {
-                        chessGUI.showHint(INFORMATION, GUITexts.serverTimeout());
+                        chessGUI.showHint(INFORMATION, GUITexts.serverTimeout() + CR + GUITexts.tryAgain());
                     }
                     catch (MoveException e1) {
                         chessGUI.showHint(WARNING, GUITexts.invalidMove() + ": " + e1.getMessage());
                     }
                     catch (ConnectException e1) {
-                        chessGUI.showHint(WARNING, GUITexts.noServerConnection() + ":" + CR + SERVER_URL);
+                        chessGUI.showHint(WARNING, GUITexts.noServerConnection() + ":" + CR + SERVER_URL
+                                + CR + GUITexts.tryAgainLater());
                     }
                     catch (Throwable e1) {
-                        chessGUI.showHint(ERROR, GUITexts.unknownError() + ": " + e1);
+                        chessGUI.showHint(ERROR, GUITexts.unknownError() + ": " + e1
+                                + CR + GUITexts.contactAdmin());
                     }
                 });
             }
         }
 
         try {
-            if (this.gameId == null) {
-                postNewGame(playerIsWhite);
+            if (!gameId.isPresent()) {
+                gameId = postNewGame(playerIsWhite);
             }
         }
         catch (ConnectException e1) {
@@ -213,7 +218,10 @@ public class ChessBoard extends GridPane {
     }
 
 
-    private void postNewGame(boolean isPlayerWhite) throws Throwable {
+    /**
+     * Causes the server to instantiate a new game
+     */
+    private Optional<GameIdValueObject> postNewGame(boolean isPlayerWhite) throws Throwable {
         System.out.println("New game, player plays " + (isPlayerWhite? "white" : "black"));
 
         WebTarget webTarget = CLIENT.target(SERVER_URL).path("games");
@@ -226,8 +234,8 @@ public class ChessBoard extends GridPane {
                     .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
 
             switch (response.getStatus()) {
-                case 200: gameId = Optional.ofNullable(response.readEntity(GameIdValueObject.class));
-                    break;
+                case 200:
+                    return Optional.ofNullable(response.readEntity(GameIdValueObject.class));
                 case 404:
                     throw new NotFoundException(webTarget.getUri());
                 default:
@@ -239,14 +247,14 @@ public class ChessBoard extends GridPane {
             while (cause.getCause() != null) cause = cause.getCause();
             throw cause;
         }
-    }
+    }// postNewGame
 
 
     /**
-     * Process a move after it has been made by a player
+     * Process a move (server call) after it has been made by a player
      */
     private void processMove(MoveInfo p) throws Throwable {
-        System.out.println("Move: " + p);
+        System.out.println("Process move: " + p);
 
         WebTarget webTarget = CLIENT.target(SERVER_URL)
                 .path("games").path(gameId.get().id).path("moves");
@@ -254,7 +262,6 @@ public class ChessBoard extends GridPane {
         Form form = new Form();
         form.param("move", p.toString());
         try {
-
             final Response response = webTarget
                     .request(MediaType.APPLICATION_JSON)
                     .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
@@ -262,7 +269,7 @@ public class ChessBoard extends GridPane {
             final Map<String, Object> json =
                     response.readEntity(new GenericType<Map<String, Object>>() {});
 
-            System.out.println("Response" + json);
+            System.out.println("Server response: " + json);
 
             switch (response.getStatus()) {
                 case 200:
@@ -288,9 +295,11 @@ public class ChessBoard extends GridPane {
                     catch (IllegalArgumentException e) {
                         throw new RestException("Unknown error code: " + errorCode);
                     }
+
                     final String errorDescr = (String) json.get(errorCodeKey);
                     System.out.println("Status code " + response.getStatus() + ", message: " +
                             (errorDescr == null? "no further information" : errorDescr));
+
                     switch (errorCode) {
                         case INVALID_MOVE:
                             throw new MoveException(errorDescr);
@@ -303,11 +312,12 @@ public class ChessBoard extends GridPane {
                 default:
                     throw new RestException("Unexpected response: " + response);
             }
-        } catch (ProcessingException e) {
+        }
+        catch (ProcessingException e) {
             Throwable cause = e;
             while (cause.getCause() != null) cause = cause.getCause();
             throw cause;
         }
-    }
+    }// processMove
 
 }
