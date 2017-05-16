@@ -22,6 +22,7 @@ import java.net.UnknownHostException;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.javacook.chessgui.GUITexts.CR;
 import static com.javacook.chessgui.RestClient.CLIENT;
 import static com.javacook.chessgui.RestClient.SERVER_URL;
 import static javafx.scene.control.Alert.AlertType.*;
@@ -80,16 +81,16 @@ public class ChessBoard extends GridPane {
                         onSpaceClick(xVal, yVal);
                     }
                     catch (TimeoutException e1) {
-                        chessGUI.showHint(INFORMATION, "A server timeout has occured.");
+                        chessGUI.showHint(INFORMATION, GUITexts.serverTimeout());
                     }
                     catch (MoveException e1) {
-                        chessGUI.showHint(Alert.AlertType.WARNING, "Invalid Move: " + e1.getMessage());
+                        chessGUI.showHint(WARNING, GUITexts.invalidMove() + ": " + e1.getMessage());
                     }
                     catch (ConnectException e1) {
-                        chessGUI.showHint(WARNING, "No connection to server:" + System.lineSeparator() + SERVER_URL);
+                        chessGUI.showHint(WARNING, GUITexts.noServerConnection() + ":" + CR + SERVER_URL);
                     }
                     catch (Throwable e1) {
-                        chessGUI.showHint(ERROR, "Unknown Error: " + e1);
+                        chessGUI.showHint(ERROR, GUITexts.unknownError() + ": " + e1);
                     }
                 });
             }
@@ -101,18 +102,17 @@ public class ChessBoard extends GridPane {
             }
         }
         catch (ConnectException e1) {
-            chessGUI.showHint(WARNING, "No connection to server:" + System.lineSeparator() + SERVER_URL
-                    + System.lineSeparator() + "Please try again later...");
+            chessGUI.showHint(WARNING, GUITexts.noServerConnection() + ":" + CR + SERVER_URL
+                    + CR + GUITexts.tryAgainLater());
             System.exit(-3);
         }
         catch (NotFoundException | UnknownHostException e1) {
-            chessGUI.showHint(WARNING, "Communication error. Invalid URI:" + System.lineSeparator() + e1.getMessage()
-                    + System.lineSeparator() + "Please contact the administrator javacook@gmx.de");
+            chessGUI.showHint(WARNING, GUITexts.communicationError() + ":" + CR + e1.getMessage()
+                    + CR + GUITexts.contactAdmin());
             System.exit(-2);
         }
         catch (Throwable e1) {
-            chessGUI.showHint(ERROR, "Unknown error: " + e1
-                    + System.lineSeparator() + "Please contact the administrator javacook@gmx.de");
+            chessGUI.showHint(ERROR, GUITexts.unknownError() + ":" + CR + e1 + CR + GUITexts.contactAdmin());
             System.exit(-1);
         }
 

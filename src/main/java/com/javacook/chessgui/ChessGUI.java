@@ -2,9 +2,6 @@ package com.javacook.chessgui;
 
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -55,7 +52,6 @@ public class ChessGUI extends Application {
     }
 
     public final static String CR = System.lineSeparator();
-    public final static GUITexts TEXTS = new GUITexts();
     private ChessBoard board;
     private boolean playerIsWhite; // white player = server
     private String gameId;
@@ -72,7 +68,7 @@ public class ChessGUI extends Application {
 
     @Override
     public void start(Stage mainStage) {
-        mainStage.setTitle(TEXTS.title());
+        mainStage.setTitle(GUITexts.title());
         mainStage.getIcons().add(new Image("assets/icons/app_icon.png"));
 
         BorderPane root = new BorderPane();
@@ -110,7 +106,7 @@ public class ChessGUI extends Application {
      */
     public Optional<ButtonType> showHint(AlertType alertType, String hint) {
         Alert alertBox = new Alert(alertType);
-        alertBox.setTitle(TEXTS.alertTitleHint());
+        alertBox.setTitle(GUITexts.alertTitleHint());
         alertBox.setHeaderText(null);
         alertBox.setContentText(hint);
         return alertBox.showAndWait();
@@ -122,8 +118,8 @@ public class ChessGUI extends Application {
      */
     private void onGameId() {
         Alert newGameAlert = new Alert(AlertType.INFORMATION);
-        newGameAlert.setTitle(TEXTS.alertTitleHint());
-        newGameAlert.setHeaderText(TEXTS.alertLabelGameIdIs());
+        newGameAlert.setTitle(GUITexts.alertTitleHint());
+        newGameAlert.setHeaderText(GUITexts.alertLabelGameIdIs());
         TextField textField = new TextField(board.getGameId().id);
         textField.setEditable(false);
         textField.setMaxWidth(300);
@@ -147,7 +143,7 @@ public class ChessGUI extends Application {
      */
     public void onDisplayAbout() {
         Alert infoAlert = new Alert(AlertType.INFORMATION);
-        infoAlert.setTitle(TEXTS.alertTitleInfo());
+        infoAlert.setTitle(GUITexts.alertTitleInfo());
         infoAlert.setHeaderText(null);
 
         // set window icon
@@ -157,7 +153,7 @@ public class ChessGUI extends Application {
         // the graphic replaces the standard icon on the left
         //infoAlert.setGraphic( new ImageView( new Image("assets/icons/cat.png", 64, 64, true, true) ) );
 
-        infoAlert.setContentText(TEXTS.altetTextInfo());
+        infoAlert.setContentText(GUITexts.altetTextInfo());
         infoAlert.showAndWait();
     }
 
@@ -168,15 +164,15 @@ public class ChessGUI extends Application {
         Window window = dialog.getDialogPane().getScene().getWindow();
         window.setOnCloseRequest(e -> System.exit(0));
 
-        dialog.setTitle(TEXTS.startDialogTitle());
+        dialog.setTitle(GUITexts.startDialogTitle());
 
-        dialog.setHeaderText(TEXTS.startDialogWelcomeText());
+        dialog.setHeaderText(GUITexts.startDialogWelcomeText());
         // Set the icon (must be included in the project).
         dialog.setGraphic(new ImageView(this.getClass().getResource("/assets/icons/app_icon.png").toString()));
 
         // Set the button types.
-        ButtonType buttonTypeWhite = new ButtonType(TEXTS.buttonLabelColorWhite());
-        ButtonType buttonTypeBlack = new ButtonType(TEXTS.buttonLabelColorBlack());
+        ButtonType buttonTypeWhite = new ButtonType(GUITexts.buttonLabelColorWhite());
+        ButtonType buttonTypeBlack = new ButtonType(GUITexts.buttonLabelColorBlack());
         dialog.getDialogPane().getButtonTypes().addAll(buttonTypeWhite, buttonTypeBlack);
 
         Node buttonWhite = dialog.getDialogPane().lookupButton(buttonTypeWhite);
@@ -193,10 +189,10 @@ public class ChessGUI extends Application {
         gameIdTextField.setMinWidth(300);
 
         final ToggleGroup toggleGroup = new ToggleGroup();
-        RadioButton newGameBut = new RadioButton(TEXTS.startDialogLabelNewGame());
+        RadioButton newGameBut = new RadioButton(GUITexts.startDialogLabelNewGame());
         newGameBut.setSelected(true);
         gameIdTextField.setDisable(true);
-        RadioButton joinGame = new RadioButton(TEXTS.startDialogLabelWithId());
+        RadioButton joinGame = new RadioButton(GUITexts.startDialogLabelWithId());
         newGameBut.setToggleGroup(toggleGroup);
         joinGame.setToggleGroup(toggleGroup);
 
@@ -249,33 +245,28 @@ public class ChessGUI extends Application {
     private MenuBar generateMenuBar() {
         MenuBar menuBar = new MenuBar();
 
-        Menu gameMenu = new Menu(TEXTS.menuLabelGame());
+        Menu gameMenu = new Menu(GUITexts.menuLabelGame());
         menuBar.getMenus().add(gameMenu);
 
-        MenuItem menuItemGameId = new MenuItem(TEXTS.menuLabelGameId());
+        MenuItem menuItemGameId = new MenuItem(GUITexts.menuLabelGameId());
         menuItemGameId.setOnAction(e -> onGameId());
         menuItemGameId.setAccelerator(new KeyCodeCombination(KeyCode.I, KeyCombination.CONTROL_DOWN));
         gameMenu.getItems().add(menuItemGameId);
 
-        MenuItem menuItemQuit = new MenuItem(TEXTS.menuLabelGameQuit());
+        MenuItem menuItemQuit = new MenuItem(GUITexts.menuLabelGameQuit());
         menuItemQuit.setOnAction(e -> onQuit());
         menuItemQuit.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN));
         gameMenu.getItems().add(menuItemQuit);
 
-        Menu menuHelp = new Menu(TEXTS.menuLabelHelp());
+        Menu menuHelp = new Menu(GUITexts.menuLabelHelp());
         menuBar.getMenus().add(menuHelp);
 
-        MenuItem menuItemAbout = new MenuItem(TEXTS.menuLabelHelpAbout());
-        //menuItemAbout.setGraphic( new ImageView( new Image("assets/icons/about.png", 16, 16, true, true) ) );
-        // Note: Accelerator F1 does not work if TextField is
-        //       in focus. This is a known issue in JavaFX.
-        //       https://bugs.openjdk.java.net/browse/JDK-8148857
+        MenuItem menuItemAbout = new MenuItem(GUITexts.menuLabelHelpAbout());
         menuItemAbout.setAccelerator(new KeyCodeCombination(KeyCode.F1));
         menuItemAbout.setOnAction(e -> onDisplayAbout());
         menuHelp.getItems().add(menuItemAbout);
 
         return menuBar;
     }
-
 
 }

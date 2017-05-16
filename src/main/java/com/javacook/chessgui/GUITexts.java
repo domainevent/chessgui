@@ -7,46 +7,45 @@ public class GUITexts {
 
     public final static String CR = System.lineSeparator();
 
-    public String title() {
+    public static String title() {
         return "DDD-Schach"; // "Chess Game"
     }
 
     // Menues
 
-    public String menuLabelGame() {
+    public static String menuLabelGame() {
         return "Spiel"; // Game
     }
 
-    public String menuLabelGameQuit() {
+    public static String menuLabelGameQuit() {
         return "Beenden"; // Quit
     }
 
-    public String menuLabelHelp() {
+    public static String menuLabelHelp() {
         return "Hilfe"; // "Help"
     }
 
-    public String menuLabelGameId() {
+    public static String menuLabelGameId() {
         return "Spiel-ID"; // "Game ID"
     }
 
-    public String menuLabelHelpAbout() {
+    public static String menuLabelHelpAbout() {
         return "Über";
     }
 
-
-    public String startDialogTitle() {
+    public static String startDialogTitle() {
         return "DDD-Schach";
     }
 
-    public String startDialogLabelNewGame() {
+    public static String startDialogLabelNewGame() {
         return "Neues Spiel"; // "Start new game"
     }
 
-    public String startDialogLabelWithId() {
+    public static String startDialogLabelWithId() {
         return "Spiel mit ID"; // "Game with id"
     }
 
-    public String startDialogWelcomeText() {
+    public static String startDialogWelcomeText() {
         return "Willkommen zu ChessGUI!" + CR + CR +
                 "Die GUI für DDD-Schach," + CR +
                 "einem Schach-Server für" + CR +
@@ -54,35 +53,69 @@ public class GUITexts {
     }
 
 
-    public String buttonLabelColorWhite() {
+    public static String buttonLabelColorWhite() {
         return "weiß";
     }
 
-    public String buttonLabelColorBlack() {
+    public static String buttonLabelColorBlack() {
         return "schwarz";
     }
 
 
-    public String alertTitleHint() {
+    public static String alertTitleHint() {
         return "Hinweis"; // "Hint"
     }
 
 
-    public String alertTitleInfo() {
+    public static String alertTitleInfo() {
         return "Über ChessGUI"; // "About this program"
     }
 
 
-    public String altetTextInfo() {
+    public static String altetTextInfo() {
         return "Entwickelt ursprünglich von M. Sirotin, S. Vascellaro" + CR + CR +
                 "Design der Schach-Figuren von Colin M.L. Burnett" + CR + CR +
                 "Angepasst für DDD-Schach von Jörg Vollmer," + CR +
                 "E-Mail: info@informatikbuero.com";
     }
 
-    public String alertLabelGameIdIs() {
+    public static String alertLabelGameIdIs() {
         return "Die Spiel-Id lautet";
     }
+
+
+    // Fehlermeldungen
+    public static String noServerConnection() {
+        return "Keine Verbindung zum Server"; // No connection to server
+    }
+
+    public static String unknownError() {
+        return "Unbekannter Fehler"; // "Unknown error
+    }
+
+    public static String communicationError() {
+        // Communication error. Invalid URI
+        return "Kommunikatioinsfehler, ungültige URI";
+    }
+
+    public static String serverTimeout() {
+        return "Ein Server-Timeout ist eingetreten"; // A server timeout has occured
+    }
+
+    public static String tryAgainLater() {
+        return "Versuchen Sie es später noch einmal..."; // Please try again later...
+    }
+
+    public static String contactAdmin() {
+        // "Please contact the administrator javacook@gmx.de"
+        return "Bitte kontaktieren Sie den Administrator javacook@gmx.de";
+    }
+
+    public static String invalidMove() {
+        return "Ungüliger Zug"; // Invalid Move
+    }
+
+
 
 
 }
