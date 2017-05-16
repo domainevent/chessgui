@@ -1,14 +1,11 @@
 package com.javacook.chessgui;
 
-import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import com.javacook.chessgui.figure.*;
 import com.javacook.dddchess.domain.ChessBoardValueObject;
 import com.javacook.dddchess.domain.FigureValueObject;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.EntityTag;
@@ -22,7 +19,7 @@ import static com.javacook.dddchess.domain.FigureValueObject.ColorEnum.WHITE;
 
 
 /**
- * For polling the current chess board from the server
+ * Polling the current chess board from the server
  */
 public class UpdateBoardTask extends Task<Object> {
 
@@ -96,8 +93,9 @@ public class UpdateBoardTask extends Task<Object> {
 
             }
             catch (Exception e) {
-                // FIXME: vollmerj: hier evtl. eine Fehlerbox?
-                System.err.println(e);
+                // TODO vollmerj: hier evtl. eine Fehlerbox?
+                // System.err.println(e);
+                e.printStackTrace();
             }
         }
     }
