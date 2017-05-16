@@ -2,6 +2,7 @@ package com.javacook.chessgui;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -15,6 +16,7 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import javafx.util.Pair;
 
 import java.util.Optional;
@@ -161,6 +163,9 @@ public class ChessGUI extends Application {
     void generateStartDialog() {
         // Create the custom dialog.
         Dialog<Pair<String, Boolean>> dialog = new Dialog<>();
+        Window window = dialog.getDialogPane().getScene().getWindow();
+        window.setOnCloseRequest(e -> System.exit(0));
+
         dialog.setTitle(TEXTS.startDialogTitle());
 
         dialog.setHeaderText(TEXTS.startDialogWelcomeText());
@@ -171,6 +176,10 @@ public class ChessGUI extends Application {
         ButtonType buttonTypeWhite = new ButtonType(TEXTS.buttonLabelColorWhite());
         ButtonType buttonTypeBlack = new ButtonType(TEXTS.buttonLabelColorBlack());
         dialog.getDialogPane().getButtonTypes().addAll(buttonTypeWhite, buttonTypeBlack);
+
+        Node buttonWhite = dialog.getDialogPane().lookupButton(buttonTypeWhite);
+        Node buttonBlack = dialog.getDialogPane().lookupButton(buttonTypeBlack);
+
 
         // Create the username and password labels and fields.
         GridPane grid = new GridPane();
@@ -184,13 +193,32 @@ public class ChessGUI extends Application {
         final ToggleGroup toggleGroup = new ToggleGroup();
         RadioButton newGameBut = new RadioButton(TEXTS.startDialogLabelNewGame());
         newGameBut.setSelected(true);
+        gameIdTextField.setDisable(true);
         RadioButton joinGame = new RadioButton(TEXTS.startDialogLabelWithId());
-        joinGame.setOnAction(t -> {
-            gameIdTextField.requestFocus();
-        });
         newGameBut.setToggleGroup(toggleGroup);
         joinGame.setToggleGroup(toggleGroup);
 
+        newGameBut.setOnAction(e -> {
+            buttonWhite.setDisable(false);
+            buttonBlack.setDisable(false);
+            gameIdTextField.setDisable(true);
+        });
+
+        joinGame.setOnAction(e -> {
+            boolean isGameIdEmpty = gameIdTextField.getText().trim().isEmpty();
+            buttonWhite.setDisable(isGameIdEmpty);
+            buttonBlack.setDisable(isGameIdEmpty);
+            gameIdTextField.setDisable(false);
+            gameIdTextField.requestFocus();
+        });
+
+        gameIdTextField.setOnKeyTyped(e -> {
+            Platform.runLater( () -> {
+                boolean isGameIdEmpty = gameIdTextField.getText().trim().isEmpty();
+                buttonWhite.setDisable(isGameIdEmpty);
+                buttonBlack.setDisable(isGameIdEmpty);
+            });
+        });
 
         grid.add(newGameBut, 0, 0);
         grid.add(joinGame, 0, 1);
