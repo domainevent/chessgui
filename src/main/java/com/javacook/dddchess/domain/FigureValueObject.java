@@ -1,5 +1,8 @@
 package com.javacook.dddchess.domain;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlType;
 
@@ -11,6 +14,7 @@ public class FigureValueObject {
     public enum FigureEnum {
         KING, QUEEN, ROOK, BISHOP, KNIGHT, PAWN;
 
+        @JsonValue
         public Character abbreviation() {
             switch (this) {
                 case KING: return 'K';
@@ -22,12 +26,27 @@ public class FigureValueObject {
             }
             throw new IllegalArgumentException("Unexpected enum " + this);
         }
+
+        @JsonCreator
+        public FigureEnum fromAbbrev(Character c) {
+            switch (c) {
+                case 'K': return KING;
+                case 'Q': return QUEEN;
+                case 'R': return ROOK;
+                case 'B': return BISHOP;
+                case 'N': return KNIGHT;
+                case 'P': return PAWN;
+            }
+            throw new IllegalArgumentException("Unexpected abbreviation character " + this);
+        }
     };
+
 
     @XmlEnum
     public enum ColorEnum {
         WHITE, BLACK;
 
+        @JsonValue
         public Character abbreviation() {
             switch (this) {
                 case WHITE: return 'w';
@@ -37,13 +56,13 @@ public class FigureValueObject {
             }
         }
 
-        public ColorEnum swap() {
-            switch (this) {
-                case WHITE: return BLACK;
-                case BLACK: return WHITE;
-                default:
-                    throw new IllegalArgumentException("Unexpected enum " + this);
+        @JsonCreator
+        public ColorEnum fromAbbrev(Character c) {
+            switch (c) {
+                case 'w': return WHITE;
+                case 'b': return BLACK;
             }
+            throw new IllegalArgumentException("Unexpected abbreviation character " + this);
         }
     };
 
