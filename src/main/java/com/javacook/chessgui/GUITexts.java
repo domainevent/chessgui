@@ -106,6 +106,10 @@ public class GUITexts {
         return "Versuchen Sie es später noch einmal..."; // Please try again later...
     }
 
+    public static String tryAgain() {
+        return "Versuchen Sie es noch einmal..."; // Please try again later...
+    }
+
     public static String contactAdmin() {
         // "Please contact the administrator javacook@gmx.de"
         return "Bitte kontaktieren Sie den Administrator javacook@gmx.de";
