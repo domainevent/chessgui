@@ -83,6 +83,10 @@ public class UpdateBoardTask extends Task<Object> {
                         });
                         break;
 
+                    case 204:
+                        System.out.println("Chess board was not delivered (null)");
+                        break;
+
                     case 304:
                         System.out.println("Chess board not changed");
                         break;
