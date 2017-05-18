@@ -37,7 +37,7 @@ public class FigureValueObject {
                 case 'N': return KNIGHT;
                 case 'P': return PAWN;
             }
-            throw new IllegalArgumentException("Unexpected marshal character " + c);
+            throw new IllegalArgumentException("Unexpected marshalled character " + c);
         }
     };
 
@@ -62,7 +62,7 @@ public class FigureValueObject {
                 case 'w': return WHITE;
                 case 'b': return BLACK;
             }
-            throw new IllegalArgumentException("Unexpected marshal character " + c);
+            throw new IllegalArgumentException("Unexpected marshalle character " + c);
         }
     };
 
