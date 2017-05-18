@@ -15,7 +15,7 @@ public class FigureValueObject {
         KING, QUEEN, ROOK, BISHOP, KNIGHT, PAWN;
 
         @JsonValue
-        public Character abbreviation() {
+        public Character marshal() {
             switch (this) {
                 case KING: return 'K';
                 case QUEEN: return 'Q';
@@ -28,7 +28,7 @@ public class FigureValueObject {
         }
 
         @JsonCreator
-        public FigureEnum fromAbbrev(Character c) {
+        public static FigureEnum unmarshal(Character c) {
             switch (c) {
                 case 'K': return KING;
                 case 'Q': return QUEEN;
@@ -37,7 +37,7 @@ public class FigureValueObject {
                 case 'N': return KNIGHT;
                 case 'P': return PAWN;
             }
-            throw new IllegalArgumentException("Unexpected abbreviation character " + this);
+            throw new IllegalArgumentException("Unexpected marshal character " + c);
         }
     };
 
@@ -47,7 +47,7 @@ public class FigureValueObject {
         WHITE, BLACK;
 
         @JsonValue
-        public Character abbreviation() {
+        public Character marshal() {
             switch (this) {
                 case WHITE: return 'w';
                 case BLACK: return 'b';
@@ -57,12 +57,12 @@ public class FigureValueObject {
         }
 
         @JsonCreator
-        public ColorEnum fromAbbrev(Character c) {
+        public static ColorEnum unmarshal(Character c) {
             switch (c) {
                 case 'w': return WHITE;
                 case 'b': return BLACK;
             }
-            throw new IllegalArgumentException("Unexpected abbreviation character " + this);
+            throw new IllegalArgumentException("Unexpected marshal character " + c);
         }
     };
 
@@ -70,16 +70,17 @@ public class FigureValueObject {
     public final ColorEnum color;
 
 
-    public FigureValueObject() {
-        this(null, null);
-    }
-
-
     public FigureValueObject(FigureEnum figure, ColorEnum color) {
         this.figure = figure;
         this.color = color;
     }
 
+    /**
+     * Wird zum Unmarshallen der Json-Objekte benoetigt
+     */
+    private FigureValueObject() {
+        this(null, null);
+    }
 
     @Override
     public String toString() {
@@ -90,6 +91,6 @@ public class FigureValueObject {
     }
 
     public String abbreviation() {
-        return "" + figure.abbreviation() + color.abbreviation();
+        return "" + figure.marshal() + color.marshal();
     }
 }

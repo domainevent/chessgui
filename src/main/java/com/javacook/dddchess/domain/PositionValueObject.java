@@ -46,14 +46,16 @@ public class PositionValueObject {
     }
 
 
-    public PositionValueObject() {
-        this(null, null);
-    }
-
-
     public PositionValueObject(String coordEncoded) {
         horCoord = HorCoord.valueOf(coordEncoded.substring(0,1).toUpperCase());
         vertCoord = VertCoord.valueOf("_" + coordEncoded.substring(1,2));
+    }
+
+    /**
+     * Wird zum Unmarshallen der Json-Objekte benoetigt
+     */
+    private PositionValueObject() {
+        this(null, null);
     }
 
     @Override

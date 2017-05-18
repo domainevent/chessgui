@@ -15,7 +15,10 @@ public class ChessBoardValueObject {
         this.board = board;
     }
 
-    public ChessBoardValueObject() {
+    /**
+     * Wird zum Unmarshallen der Json-Objekte benoetigt
+     */
+    private ChessBoardValueObject() {
         this(null);
     }
 
