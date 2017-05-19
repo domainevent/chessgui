@@ -73,9 +73,9 @@ public class GUITexts {
 
 
     public static String altetTextInfo() {
-        return "Entwickelt ursprünglich von M. Sirotin, S. Vascellaro;" + CR +
-               "Design der Schach-Figuren von Colin M.L. Burnett;" + CR +
-               "Angepasst für DDD-Schach von Jörg Vollmer," + CR +
+        return "Initiatoren: M. Sirotin und S. Vascellaro" + CR +
+               "Design der Schach-Figuren: Colin M.L. Burnett" + CR +
+               "Angepasst für DDD-Schach: Jörg Vollmer" + CR +
                "E-Mail: info@informatikbuero.com";
     }
 
