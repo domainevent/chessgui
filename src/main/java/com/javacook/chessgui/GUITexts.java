@@ -119,7 +119,4 @@ public class GUITexts {
         return "Ungültiger Zug"; // Invalid Move
     }
 
-
-
-
 }
