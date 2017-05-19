@@ -282,6 +282,7 @@ public class ChessBoard extends GridPane {
                 }
                 case 404:
                     throw new NotFoundException(webTarget.getUri());
+                case 400:
                 case 422:
                 case 503: {
                     final String errorCodeKey = (String) json.get(ErrorCode.ERROR_CODE_KEY);
