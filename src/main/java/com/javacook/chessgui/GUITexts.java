@@ -73,10 +73,10 @@ public class GUITexts {
 
 
     public static String altetTextInfo() {
-        return "Entwickelt ursprünglich von M. Sirotin, S. Vascellaro" + CR + CR +
-                "Design der Schach-Figuren von Colin M.L. Burnett" + CR + CR +
-                "Angepasst für DDD-Schach von Jörg Vollmer," + CR +
-                "E-Mail: info@informatikbuero.com";
+        return "Entwickelt ursprünglich von M. Sirotin, S. Vascellaro" + CR +
+               "Design der Schach-Figuren von Colin M.L. Burnett" + CR +
+               "Angepasst für DDD-Schach von Jörg Vollmer," + CR +
+               "E-Mail: info@informatikbuero.com";
     }
 
     public static String alertLabelGameIdIs() {
@@ -95,7 +95,7 @@ public class GUITexts {
 
     public static String communicationError() {
         // Communication error. Invalid URI
-        return "Kommunikatioinsfehler, ungültige URI";
+        return "Kommunikationsfehler, ungültige URI";
     }
 
     public static String serverTimeout() {
@@ -116,7 +116,7 @@ public class GUITexts {
     }
 
     public static String invalidMove() {
-        return "Ungüliger Zug"; // Invalid Move
+        return "Ungültiger Zug"; // Invalid Move
     }
 
 
