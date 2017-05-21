@@ -87,6 +87,14 @@ public class UpdateBoardTask extends Task<Object> {
                         System.out.println("Chess board not changed");
                         break;
 
+                    case 422:
+                        System.out.println(response.readEntity(String.class));
+                        break;
+
+                    case 500:
+                        System.out.println(response.readEntity(String.class));
+                        break;
+
                     default:
                         System.out.println("Unexpected status code: " + response.getStatus());
                 }
