@@ -1,9 +1,6 @@
 package com.javacook.chessgui;
 
-import com.javacook.chessgui.exception.MoveException;
-import com.javacook.chessgui.exception.NotFoundException;
-import com.javacook.chessgui.exception.RestException;
-import com.javacook.chessgui.exception.TimeoutException;
+import com.javacook.chessgui.exception.*;
 import com.javacook.chessgui.figure.*;
 import com.javacook.dddchess.domain.ErrorCode;
 import com.javacook.dddchess.domain.GameIdValueObject;
@@ -88,6 +85,9 @@ public class ChessBoard extends GridPane {
                     }
                     catch (MoveException e1) {
                         chessGUI.showHint(WARNING, GUITexts.invalidMove() + ": " + e1.getMessage());
+                    }
+                    catch (InvalidGameIdException e1) {
+                        chessGUI.showHint(ERROR, GUITexts.invalidGameId() + ": " + e1.getMessage());
                     }
                     catch (ConnectException e1) {
                         chessGUI.showHint(WARNING, GUITexts.noServerConnection() + ":" + CR + SERVER_URL
@@ -304,6 +304,8 @@ public class ChessBoard extends GridPane {
                     switch (errorCode) {
                         case INVALID_MOVE:
                             throw new MoveException(errorDescr);
+                        case INVALID_GAMEID:
+                            throw new InvalidGameIdException(errorDescr);
                         case TIMEOUT:
                             throw new TimeoutException();
                         default:

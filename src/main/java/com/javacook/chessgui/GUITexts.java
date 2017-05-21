@@ -119,6 +119,9 @@ public class GUITexts {
         return "Ungüliger Zug"; // Invalid Move
     }
 
+    public static String invalidGameId() {
+        return "Ungülige SpielId"; // Invalid Game IdMove
+    }
 
 
 
