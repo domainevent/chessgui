@@ -4,7 +4,6 @@ import com.javacook.chessgui.exception.*;
 import com.javacook.chessgui.figure.*;
 import com.javacook.dddchess.domain.ErrorCode;
 import com.javacook.dddchess.domain.GameIdValueObject;
-import javafx.scene.control.Alert;
 import javafx.scene.layout.GridPane;
 
 import javax.ws.rs.ProcessingException;
@@ -83,7 +82,7 @@ public class ChessBoard extends GridPane {
                     catch (TimeoutException e1) {
                         chessGUI.showHint(INFORMATION, GUITexts.serverTimeout() + CR + GUITexts.tryAgain());
                     }
-                    catch (MoveException e1) {
+                    catch (InvalidMoveException e1) {
                         chessGUI.showHint(WARNING, GUITexts.invalidMove() + ": " + e1.getMessage());
                     }
                     catch (InvalidGameIdException e1) {
@@ -303,7 +302,7 @@ public class ChessBoard extends GridPane {
 
                     switch (errorCode) {
                         case INVALID_MOVE:
-                            throw new MoveException(errorDescr);
+                            throw new InvalidMoveException(errorDescr);
                         case INVALID_GAMEID:
                             throw new InvalidGameIdException(errorDescr);
                         case TIMEOUT:
