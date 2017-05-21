@@ -88,6 +88,7 @@ public class UpdateBoardTask extends Task<Object> {
                         break;
 
                     case 422:
+                        // FIXME: Nicht String, sondern HashMap
                         System.out.println(response.readEntity(String.class));
                         break;
 
