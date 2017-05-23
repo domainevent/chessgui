@@ -2,6 +2,7 @@ package com.javacook.chessgui;
 
 import com.javacook.chessgui.figure.*;
 import com.javacook.dddchess.domain.ChessBoardValueObject;
+import com.javacook.dddchess.domain.ErrorCode;
 import com.javacook.dddchess.domain.FigureValueObject;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -9,12 +10,16 @@ import javafx.concurrent.Task;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.EntityTag;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static com.javacook.chessgui.RestClient.CLIENT;
 import static com.javacook.chessgui.RestClient.SERVER_URL;
+import static com.javacook.dddchess.domain.ErrorCode.INVALID_GAMEID;
 import static com.javacook.dddchess.domain.FigureValueObject.ColorEnum.WHITE;
 
 
@@ -88,8 +93,34 @@ public class UpdateBoardTask extends Task<Object> {
                         break;
 
                     case 422:
-                        // FIXME: Nicht String, sondern HashMap
-                        System.out.println(response.readEntity(String.class));
+                        final Map<String, Object> json =
+                                response.readEntity(new GenericType<HashMap<String, Object>>() {});
+                        final String errorCodeKey = (String)json.get(ErrorCode.ERROR_CODE_KEY);
+                        if (errorCodeKey == null) {
+                            System.out.println("No error description present!");
+                            break;
+                        }
+                        else {
+                            try {
+                                final ErrorCode errorCode = ErrorCode.valueOf(errorCodeKey);
+                                switch (errorCode) {
+                                    case TIMEOUT:
+                                        System.out.println("A System timeout occured");
+                                        break;
+                                    case INVALID_GAMEID:
+                                        System.out.println("Usage of an unknown game Id: '" +
+                                                json.get(INVALID_GAMEID.name()) + "'");
+                                        break;
+                                    default:
+                                        System.out.println("Unexpected error code: " + errorCode);
+                                    case INVALID_MOVE:
+                                }
+                            }
+                            catch (IllegalArgumentException e) {
+                                System.out.println("Unknown error description: " + errorCodeKey);
+                                break;
+                            }
+                        }
                         break;
 
                     case 500:
@@ -98,14 +129,14 @@ public class UpdateBoardTask extends Task<Object> {
 
                     default:
                         System.out.println("Unexpected status code: " + response.getStatus());
-                }
+                }// switch (response.getStatus())
 
             }
             catch (Exception e) {
-                // TODO vollmerj: hier evtl. eine Fehlerbox?
                 // System.err.println(e);
                 e.printStackTrace();
             }
-        }
-    }
+        }// while (true)
+    }// call
+
 }
