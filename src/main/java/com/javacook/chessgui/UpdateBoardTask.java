@@ -133,8 +133,8 @@ public class UpdateBoardTask extends Task<Object> {
 
             }
             catch (Exception e) {
-                // System.err.println(e);
-                e.printStackTrace();
+                System.out.println(e);
+                // e.printStackTrace();
             }
         }// while (true)
     }// call
