@@ -92,6 +92,7 @@ public class UpdateBoardTask extends Task<Object> {
                         System.out.println("Chess board not changed");
                         break;
 
+                    case 404:
                     case 422:
                         final Map<String, Object> json =
                                 response.readEntity(new GenericType<HashMap<String, Object>>() {});
