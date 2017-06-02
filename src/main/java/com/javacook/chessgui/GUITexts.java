@@ -120,11 +120,11 @@ public class GUITexts {
     }
 
     public static String invalidMove() {
-        return "Ungüliger Zug"; // Invalid Move
+        return "Ungültiger Zug"; // Invalid Move
     }
 
     public static String invalidGameId() {
-        return "Ungülige SpielId"; // Invalid Game IdMove
+        return "Ungültige SpielId"; // Invalid Game IdMove
     }
 
 
