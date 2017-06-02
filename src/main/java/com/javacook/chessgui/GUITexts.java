@@ -99,7 +99,7 @@ public class GUITexts {
     }
 
     public static String notFound() {
-        return "Eine Partie unter folgender Id ist nicht bekannt";
+        return "Eine Partie mit folgender Id ist nicht bekannt";
     }
 
     public static String serverTimeout() {
