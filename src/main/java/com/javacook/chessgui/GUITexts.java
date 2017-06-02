@@ -140,7 +140,7 @@ public class GUITexts {
                 return "Es befinden sich Spielfiguren auf dem Zugweg.";
 
             case "LAUEFER_ZIEHT_DIAGONAL":
-                return "Der Läufer kann nur diagonale Strecken ziehen.";
+                return "Der Läufer darf nur diagonale Strecken ziehen.";
 
             case "TURM_ZIEHT_GERADE":
             case "DAME_ZIEHT_GERADE_ODER_DIAGONAL":
