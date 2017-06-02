@@ -311,8 +311,8 @@ public class ChessBoard extends GridPane {
                     switch (errorCode) {
                         case INVALID_MOVE:
                             String errorMessage = errorDescr;
-                            String errorHint = (String)json.get(errorDescr);
-                            if (errorHint != null) errorMessage += CR + errorHint;
+                            String moveHint = (String)json.get(errorDescr);
+                            if (moveHint != null) errorMessage += CR + GUITexts.moveHint(moveHint);
                             throw new InvalidMoveException(errorMessage);
                         case INVALID_GAMEID:
                             throw new InvalidGameIdException(errorDescr);

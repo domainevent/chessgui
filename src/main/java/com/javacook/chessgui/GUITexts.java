@@ -128,5 +128,30 @@ public class GUITexts {
     }
 
 
+    public static String moveHint(String code) {
+        switch (code) {
+            case "SPIELFIGUR_MUSS_EXISTIEREN":
+                return "Es existiert keine Spielfigur auf den Feld.";
+
+            case "SPIELER_MUSS_AM_ZUG_SEIN":
+                return "Der anderen Spieler ist am Zug.";
+
+            case "ZUG_STRECKE_MUSS_FREI_SEIN":
+                return "Es befinden sich Spielfiguren auf dem Zugweg.";
+
+            case "LAUEFER_ZIEHT_DIAGONAL":
+                return "Der Läufer kann nur diagonale Strecken ziehen.";
+
+            case "TURM_ZIEHT_GERADE":
+            case "DAME_ZIEHT_GERADE_ODER_DIAGONAL":
+            case "KOENIG_ZIEHT_NUR_EIN_FELD":
+            case "PFERD_ZIEHT_EINEN_WINKEL":
+            case "KOENIG_KANN_NICHT_GESCHLAGEN_WERDEN":
+            case "BAUER_SCHLAEGT_NUR_SCHRAEG":
+            case "BAUER_ZIEHT_NUR_EIN_FELD_AUSSER_AM_ANFANG":
+            case "KOENIG_STEHT_IM_SCHACH":
+            default: return code;
+        }
+    }
 
 }

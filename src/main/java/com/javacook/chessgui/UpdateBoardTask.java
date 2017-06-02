@@ -114,7 +114,6 @@ public class UpdateBoardTask extends Task<Object> {
                                         break;
                                     default:
                                         System.out.println("Unexpected error code: " + errorCode);
-                                    case INVALID_MOVE:
                                 }
                             }
                             catch (IllegalArgumentException e) {
