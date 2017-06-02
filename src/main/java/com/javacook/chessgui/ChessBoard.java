@@ -93,7 +93,7 @@ public class ChessBoard extends GridPane {
                                 + CR + GUITexts.tryAgainLater());
                     }
                     catch (NotFoundException e1) {
-                        chessGUI.showHint(WARNING, GUITexts.notFound() + ":" + CR + gameIdStr
+                        chessGUI.showHint(WARNING, GUITexts.notFound() + ":" + CR + gameId.get()
                                 + CR + GUITexts.contactAdmin());
                     }
                     catch (Throwable e1) {
@@ -310,7 +310,7 @@ public class ChessBoard extends GridPane {
 
                     switch (errorCode) {
                         case INVALID_MOVE:
-                            String errorMessage = errorDescr;
+                            String errorMessage = errorDescr + ".";
                             String moveHint = (String)json.get(errorDescr);
                             if (moveHint != null) errorMessage += CR + GUITexts.moveHint(moveHint);
                             throw new InvalidMoveException(errorMessage);
