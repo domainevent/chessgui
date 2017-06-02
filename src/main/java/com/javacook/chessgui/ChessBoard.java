@@ -92,6 +92,10 @@ public class ChessBoard extends GridPane {
                         chessGUI.showHint(WARNING, GUITexts.noServerConnection() + ":" + CR + SERVER_URL
                                 + CR + GUITexts.tryAgainLater());
                     }
+                    catch (NotFoundException e1) {
+                        chessGUI.showHint(WARNING, GUITexts.notFound() + ":" + CR + gameIdStr
+                                + CR + GUITexts.contactAdmin());
+                    }
                     catch (Throwable e1) {
                         chessGUI.showHint(ERROR, GUITexts.unknownError() + ": " + e1
                                 + CR + GUITexts.contactAdmin());
@@ -265,6 +269,10 @@ public class ChessBoard extends GridPane {
                     .request(MediaType.APPLICATION_JSON)
                     .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
 
+            if (response.getStatus() == 500) {
+                throw new RestException(response.readEntity(String.class));
+            }
+
             final Map<String, Object> json =
                     response.readEntity(new GenericType<Map<String, Object>>() {});
 
@@ -302,7 +310,10 @@ public class ChessBoard extends GridPane {
 
                     switch (errorCode) {
                         case INVALID_MOVE:
-                            throw new InvalidMoveException(errorDescr);
+                            String errorMessage = errorDescr;
+                            String errorHint = (String)json.get(errorDescr);
+                            if (errorHint != null) errorMessage += CR + errorHint;
+                            throw new InvalidMoveException(errorMessage);
                         case INVALID_GAMEID:
                             throw new InvalidGameIdException(errorDescr);
                         case TIMEOUT:

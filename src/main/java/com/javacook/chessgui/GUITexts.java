@@ -98,6 +98,10 @@ public class GUITexts {
         return "Kommunikatioinsfehler, ungültige URI";
     }
 
+    public static String notFound() {
+        return "Eine Partie unter folgender Id ist nicht bekannt";
+    }
+
     public static String serverTimeout() {
         return "Ein Server-Timeout ist eingetreten"; // A server timeout has occured
     }
