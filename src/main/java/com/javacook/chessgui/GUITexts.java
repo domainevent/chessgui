@@ -130,26 +130,54 @@ public class GUITexts {
 
     public static String moveHint(String code) {
         switch (code) {
-            case "SPIELFIGUR_MUSS_EXISTIEREN":
+            case "DER_RICHTIGE_SPIELER_MUSS_AM_ZUG_SEIN":
+                return "Der andere Spieler ist am Zug.";
+
+            case "STARTFELD_MUSS_SPIELFIGUR_ENTHALTEN":
                 return "Es existiert keine Spielfigur auf den Feld.";
 
-            case "SPIELER_MUSS_AM_ZUG_SEIN":
-                return "Der anderen Spieler ist am Zug.";
-
             case "ZUG_STRECKE_MUSS_FREI_SEIN":
-                return "Es befinden sich Spielfiguren auf dem Zugweg.";
+                return "Es befinden sich Spielfiguren auf dem Zug-Weg.";
+
+            case "EIGENE_FIGUREN_LASSEN_SICH_NICHT_SCHLAGEN":
+                 return "Eine eigene Figur lässt sich nicht schlagen.";
+
+            case "KOENIG_KANN_NICHT_GESCHLAGEN_WERDEN":
+                 return "Der König kann nicht geschlagen werden";
 
             case "LAUEFER_ZIEHT_DIAGONAL":
                 return "Der Läufer darf nur diagonale Strecken ziehen.";
 
             case "TURM_ZIEHT_GERADE":
+                return "Der Turm darf nur geradlinig ziehen.";
+
             case "DAME_ZIEHT_GERADE_ODER_DIAGONAL":
+                return "Die Dame darf nur geradlinig oder diagonal ziehen.";
+
             case "KOENIG_ZIEHT_NUR_EIN_FELD":
-            case "PFERD_ZIEHT_EINEN_WINKEL":
-            case "KOENIG_KANN_NICHT_GESCHLAGEN_WERDEN":
+                return "Der König darf nur ein Feld ziehen.";
+
+            case "SPRINGER_ZIEHT_EINEN_WINKEL":
+                return "Der Springer darf nur eine 2x1-Haken ziehen.";
+
             case "BAUER_SCHLAEGT_NUR_SCHRAEG":
-            case "BAUER_ZIEHT_NUR_EIN_FELD_AUSSER_AM_ANFANG":
+                return "Der Bauer darf nur ein Feld schräg nach vorne schlagen.";
+
+            case "BAUER_ZIEHT_NUR_GEREADE_FALLS_ER_NICHT_SCHLAEGT":
+                return "Der Bauer darf nur nach vorne rücken, falls er keine Figur schlägt.";
+
+            case "BAUER_ZIEHT_EIN_FELD_VORWAERTS_AUSSER_AM_ANFANG_ZWEI":
+                return "Der Bauer darf nur ein Feld (bzw. zwei zu Beginn) nach vorne rücken.";
+
+            case "BAUER_ZIEHT_EIN_FELD_VORWAERTS_FALLS_ER_SCHLAEGT":
+                return "Der Bauer muss beim Schlagen ein Feld nach vorne rücken.";
+
+            case "BAUER_ZIEHT_MAXIMAL_EIN_FELD_SEITWAERTS":
+                return "Der Bauer darf (für das Schlagen) maximal ein Feld seitwärts ziehen.";
+
             case "KOENIG_STEHT_IM_SCHACH":
+                return "Der König steht im Schach.";
+
             default: return code;
         }
     }
