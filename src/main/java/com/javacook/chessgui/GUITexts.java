@@ -99,7 +99,7 @@ public class GUITexts {
     }
 
     public static String notFound() {
-        return "Eine Partie unter folgender Id ist nicht bekannt";
+        return "Eine Partie mit folgender Id ist nicht bekannt";
     }
 
     public static String serverTimeout() {
@@ -120,11 +120,11 @@ public class GUITexts {
     }
 
     public static String invalidMove() {
-        return "Ungüliger Zug"; // Invalid Move
+        return "Ungültiger Zug"; // Invalid Move
     }
 
     public static String invalidGameId() {
-        return "Ungülige SpielId"; // Invalid Game IdMove
+        return "Ungültige SpielId"; // Invalid Game IdMove
     }
 
 
