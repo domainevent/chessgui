@@ -93,8 +93,9 @@ public class ChessBoard extends GridPane {
                                 + CR + GUITexts.tryAgainLater());
                     }
                     catch (NotFoundException e1) {
-                        chessGUI.showHint(WARNING, GUITexts.notFound() + ":" + CR + gameIdStr
-                                + CR + GUITexts.contactAdmin());
+                        chessGUI.showHint(WARNING, GUITexts.notFound() + ":" + CR +
+                                (gameId.isPresent()? gameId.get() : "no Id available") +
+                                CR + GUITexts.contactAdmin());
                     }
                     catch (Throwable e1) {
                         chessGUI.showHint(ERROR, GUITexts.unknownError() + ": " + e1
