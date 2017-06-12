@@ -178,6 +178,18 @@ public class GUITexts {
             case "KOENIG_STEHT_IM_SCHACH":
                 return "Der König steht im Schach.";
 
+            case "ROCHADE_FELD_STEHT_IM_SCHACH":
+                return "Bei der Rochade darf kein Feld des Königszugs im Schach stehen.";
+
+            case "ROCHADE_KOENIG_WURDE_BEREITS_BEWEGT":
+                return "Bei der Rochade darf der König nicht zuvor bewegt worden sein.";
+
+            case "ROCHADE_TURM_WURDE_BEREITS_BEWEGT":
+                return "Bei der Rochade darf der beteiligte Turm nicht zuvor bewegt worden sein.";
+
+            case "EN_PASSANT_VORGAENGER_HALBZUG_MUSS_BAUER_SEIN":
+                return "Der zu schlagende Bauer muss unmittelbar vorher gezogen worden sein.";
+
             default: return code;
         }
     }
