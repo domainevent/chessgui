@@ -47,6 +47,7 @@ public class UpdateBoardTask extends Task<Object> {
 
                 System.out.println("Update call: " + webTarget.getUri());
                 final Invocation.Builder builder = webTarget.request(MediaType.APPLICATION_JSON);
+                builder.header("clientId", RestClient.CLIENT_ID);
                 if (entityTag != null) {
                     builder.header("If-None-Match", '"'+entityTag.getValue()+'"');
                 }
