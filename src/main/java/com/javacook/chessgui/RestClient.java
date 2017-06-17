@@ -13,7 +13,9 @@ import javax.ws.rs.client.ClientBuilder;
 public class RestClient {
 
 //    public final static String DEFAULT_SERVER_URL = "http://localhost:8080/dddchess/api";
-    public final static String DEFAULT_SERVER_URL = "http://localhost:8080/dddschach/api";
+//    public final static String DEFAULT_SERVER_URL = "http://localhost:8080/dddschach/api";
+    public final static String DEFAULT_SERVER_URL = "http://clean-coder.de:8080/dddschach/api";
+
     public final static int TIMEOUT = 2000;
 
     public static String SERVER_URL = DEFAULT_SERVER_URL;

@@ -191,10 +191,10 @@ public class GUITexts {
                 return "Der zu schlagende Bauer muss unmittelbar vorher gezogen worden sein.";
 
             case "DIE_PARTIE_ENDET_MATT":
-                return "Die Partie ended Schachmatt.";
+                return "Die Partie endet Schachmatt.";
 
             case "DIE_PARTIE_ENDET_PATT":
-                return "Die Partie ended mit einem Patt.";
+                return "Die Partie endet mit einem Patt.";
 
             default: return code;
         }
