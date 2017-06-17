@@ -190,6 +190,12 @@ public class GUITexts {
             case "EN_PASSANT_VORGAENGER_HALBZUG_MUSS_BAUER_SEIN":
                 return "Der zu schlagende Bauer muss unmittelbar vorher gezogen worden sein.";
 
+            case "DIE_PARTIE_ENDET_MATT":
+                return "Die Partie ended Schachmatt.";
+
+            case "DIE_PARTIE_ENDET_PATT":
+                return "Die Partie ended mit einem Patt.";
+
             default: return code;
         }
     }
