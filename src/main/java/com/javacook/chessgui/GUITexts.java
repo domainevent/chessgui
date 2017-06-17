@@ -176,7 +176,7 @@ public class GUITexts {
                 return "Der Bauer darf (für das Schlagen) maximal ein Feld seitwärts ziehen.";
 
             case "KOENIG_STEHT_IM_SCHACH":
-                return "Der König steht im Schach.";
+                return "Der König stünde (noch) im Schach.";
 
             case "ROCHADE_FELD_STEHT_IM_SCHACH":
                 return "Bei der Rochade darf kein Feld des Königszugs im Schach stehen.";
