@@ -26,7 +26,7 @@ public class Pawn extends Piece {
 
         //since pawns will never be white AND black, only returns moves of correct direction
         if (isWhite) {
-            ArrayList<MoveList> whiteMoves = new ArrayList<MoveList>();
+            ArrayList<MoveList> whiteMoves = new ArrayList<>();
 
             //standard straight, can't capture using this
             whiteMoves.add(MoveList.UP);
@@ -41,7 +41,7 @@ public class Pawn extends Piece {
             moves = whiteMoves.toArray(moves);
         }
         else {
-            ArrayList<MoveList> blackMoves = new ArrayList<MoveList>();
+            ArrayList<MoveList> blackMoves = new ArrayList<>();
 
             //standard straight, can't capture
             blackMoves.add(MoveList.DOWN);
