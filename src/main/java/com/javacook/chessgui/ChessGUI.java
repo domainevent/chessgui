@@ -34,6 +34,7 @@ public class ChessGUI extends Application {
         try {
             System.out.println("Starting ChessGUI with args: " + Arrays.asList(args));
             extractAndSetServerUrl(args);
+            System.out.println("Using server: " + RestClient.SERVER_URL);
             launch(args);
             System.exit(0);
         }
@@ -55,7 +56,6 @@ public class ChessGUI extends Application {
                 if ("".equals(pathNormed)) {
                     serverUrl = uri.getScheme() + "://" + uri.getHost() + ":" + uri.getPort() + "/dddschach/api";
                 }
-                System.out.println("Using server: " + serverUrl);
                 RestClient.SERVER_URL = serverUrl;
             }
         }
