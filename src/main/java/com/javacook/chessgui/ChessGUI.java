@@ -18,6 +18,9 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.Pair;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Arrays;
 import java.util.Optional;
 
 
@@ -29,6 +32,7 @@ public class ChessGUI extends Application {
     public static void main(String[] args) {
         // Automatic VM reset, thanks to Joseph Rachmuth.
         try {
+            System.out.println("Starting ChessGUI with args: " + Arrays.asList(args));
             extractAndSetServerUrl(args);
             launch(args);
             System.exit(0);
@@ -39,13 +43,19 @@ public class ChessGUI extends Application {
         }
     }
 
-    private static void extractAndSetServerUrl(String[] args) {
+    private static void extractAndSetServerUrl(String[] args) throws URISyntaxException {
         for (String arg : args) {
             if (arg.startsWith("server=")) {
                 String serverUrl = arg.substring(7).trim();
                 if (!serverUrl.startsWith("http")) {
                     serverUrl = "http://" + serverUrl;
                 }
+                URI uri = new URI(serverUrl);
+                final String pathNormed = uri.getPath().replace("/", "");
+                if ("".equals(pathNormed)) {
+                    serverUrl = uri.getScheme() + "://" + uri.getHost() + ":" + uri.getPort() + "/dddschach/api";
+                }
+                System.out.println("Using server: " + serverUrl);
                 RestClient.SERVER_URL = serverUrl;
             }
         }
