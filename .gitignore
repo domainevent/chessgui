@@ -5,7 +5,6 @@ target/
 .settings
 .idea
 *.iml
-*.jar
 *.war
 *.ear
 *.lnk
