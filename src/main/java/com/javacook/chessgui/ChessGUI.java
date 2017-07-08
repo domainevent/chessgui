@@ -54,7 +54,9 @@ public class ChessGUI extends Application {
                 URI uri = new URI(serverUrl);
                 final String pathNormed = uri.getPath().replace("/", "");
                 if ("".equals(pathNormed)) {
-                    serverUrl = uri.getScheme() + "://" + uri.getHost() + ":" + uri.getPort() + "/dddschach/api";
+                    serverUrl = uri.getScheme() + "://" + uri.getHost() +
+                               (uri.getPort() == -1? "" : ":" + uri.getPort()) +
+                               "/dddschach/api";
                 }
                 RestClient.SERVER_URL = serverUrl;
             }
