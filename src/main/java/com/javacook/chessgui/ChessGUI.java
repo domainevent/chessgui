@@ -58,6 +58,9 @@ public class ChessGUI extends Application {
                 }
                 RestClient.SERVER_URL = serverUrl;
             }
+            else {
+                System.out.println("Warning: invalid option: "+ arg);
+            }
         }
     }
 
