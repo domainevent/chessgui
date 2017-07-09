@@ -17,6 +17,25 @@
         <server>localhost:8080/dddschach/api</server>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>javacook-maven-repository</id>
+            <url>http://www.clean-coder.de:8080/artifactory/javacook/</url>
+        </repository>
+    </repositories>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>Artifactory</id>
+            <url>http://www.clean-coder.de:8080/artifactory/libs-snapshot-local</url>
+            <uniqueVersion>true</uniqueVersion>
+        </snapshotRepository>
+        <repository>
+            <id>Artifactory</id>
+            <url>http://www.clean-coder.de:8080/artifactory/libs-release-local</url>
+        </repository>
+    </distributionManagement>
+
     <build>
         <pluginManagement>
             <plugins>
