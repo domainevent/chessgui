@@ -66,31 +66,31 @@ public class FigureValueObject {
         }
     };
 
-    public final FigureEnum figure;
-    public final ColorEnum color;
+    public final FigureEnum figurTyp;
+    public final ColorEnum farbe;
 
 
-    public FigureValueObject(FigureEnum figure, ColorEnum color) {
-        this.figure = figure;
-        this.color = color;
+    public FigureValueObject(FigureEnum figurTyp, ColorEnum farbe) {
+        this.figurTyp = figurTyp;
+        this.farbe = farbe;
     }
 
     /**
      * Wird zum Unmarshallen der Json-Objekte benoetigt
      */
-    private FigureValueObject() {
+    public FigureValueObject() {
         this(null, null);
     }
 
     @Override
     public String toString() {
         return "FigureValueObject{" +
-                "figure=" + figure +
-                ", color=" + color +
+                "figurTyp=" + figurTyp +
+                ", farbe=" + farbe +
                 '}';
     }
 
     public String abbreviation() {
-        return "" + figure.marshal() + color.marshal();
+        return "" + figurTyp.marshal() + farbe.marshal();
     }
 }

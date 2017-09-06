@@ -37,30 +37,30 @@ public class PositionValueObject {
     }
 
 
-    public final HorCoord horCoord;
-    public final VertCoord vertCoord;
+    public final HorCoord spalte;
+    public final VertCoord zeile;
 
-    public PositionValueObject(HorCoord horCoord, VertCoord vertCoord) {
-        this.horCoord = horCoord;
-        this.vertCoord = vertCoord;
+    public PositionValueObject(HorCoord spalte, VertCoord zeile) {
+        this.spalte = spalte;
+        this.zeile = zeile;
     }
 
 
     public PositionValueObject(String coordEncoded) {
-        horCoord = HorCoord.valueOf(coordEncoded.substring(0,1).toUpperCase());
-        vertCoord = VertCoord.valueOf("_" + coordEncoded.substring(1,2));
+        spalte = HorCoord.valueOf(coordEncoded.substring(0,1).toUpperCase());
+        zeile = VertCoord.valueOf("_" + coordEncoded.substring(1,2));
     }
 
     /**
      * Wird zum Unmarshallen der Json-Objekte benoetigt
      */
-    private PositionValueObject() {
+    public PositionValueObject() {
         this(null, null);
     }
 
     @Override
     public String toString() {
-        return horCoord.toString() + vertCoord.toString();
+        return spalte.toString() + zeile.toString();
     }
 
 }

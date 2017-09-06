@@ -68,8 +68,8 @@ public class UpdateBoardTask extends Task<Object> {
                                         chessBoardGui.getSpace(i,j).setPiece(null);
                                     }
                                     else {
-                                        boolean isWhite = figure.color == WHITE;
-                                        switch (figure.figure) {
+                                        boolean isWhite = figure.farbe == WHITE;
+                                        switch (figure.figurTyp) {
                                             case BISHOP:
                                                 chessBoardGui.getSpace(i,j).setPiece(new Bishop(isWhite)); break;
                                             case QUEEN:
