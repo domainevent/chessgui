@@ -1,8 +1,8 @@
 # ChessGUI
 
 ### Voraussetzungen 
-Ein laufender Schach-Server dddschach (im Rahmen einer DDD-Schulung zu 
-vervollständigen) oder dddchess (Prototyp). Wird dddschach verwendet 
+Ein laufender Schach-Server com.javacook.dddschach (im Rahmen einer DDD-Schulung zu 
+vervollständigen) oder dddchess (Prototyp). Wird com.javacook.dddschach verwendet 
 (Dokumentation befindet sich wie hier im Projektordner in README.md), 
 muss nichts gesondert konfiguriert werden. 
 
@@ -10,7 +10,7 @@ muss nichts gesondert konfiguriert werden.
 Die GUI lässt sich mit <tt>mvn compile exec:java</tt> direkt starten.
 
 **Hinweis:** ChessGUI verbindet sich per Default mit dem 
-**dddschach**-Server unter <tt>http://localhost:8080/dddschach/api</tt>. 
+**com.javacook.dddschach**-Server unter <tt>http://localhost:8080/com.javacook.dddschach/api</tt>. 
 Dies lässt sich ggf. (für dddchess) anpassen mit 
 <tt>mvn exec:java -Dserver=localhost:8080/dddchess/api</tt>. 
  
